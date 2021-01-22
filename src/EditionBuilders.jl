@@ -11,5 +11,6 @@ export editednode
 abstract type EditionBuilder end
 
 include("literaltext.jl")
+include("midbasic.jl")
 
 end # module

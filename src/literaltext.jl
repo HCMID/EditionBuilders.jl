@@ -14,3 +14,21 @@ function editednode(builder::LiteralTextBuilder, citablenode::CitableNode)
     txt = root(doc).content
     CitableNode(addversion(citablenode.urn, builder.versionid), txt)
 end
+
+
+"Generic validator accepting any XML element in the text of `citablenode`."
+function badusage(builder::LiteralTextBuilder, citablenode::CitableNode)
+    []
+end
+
+
+"True if elname is a valid name for an XML element in the given Edition Builder."
+function validelname(builder::EditionBuilder, elname::AbstractString)::Bool
+    elname in acceptedElementNames(builder)
+end
+
+"""No element names are accepted by default. 
+Subtypes of `EditionBuilder` must implement this function appropriately."""
+function acceptedElementNames(builder::EditionBuilder)
+    []
+end
