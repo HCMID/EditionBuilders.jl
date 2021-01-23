@@ -29,5 +29,11 @@ end
     doc4 = parsexml("<choice><add>Doctor</add><del>Dr.</del></choice>")
     n4 = root(doc4)
     @test EditionBuilders.validchoice(n4) == false
+end
 
+@testset "Test error messages on invalid choice syntax" begin
+    doc = parsexml("<choice><add>Doctor</add><del>Dr.</del></choice>")
+    n = root(doc)
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+    @test_throws  DomainError("Invalid children of `choice` element: add, del") editedtext(bldr, n) 
 end

@@ -54,7 +54,12 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
             throw(DomainError("Invalid element $(n.name)."))
         end
         if n.name == "choice"
-            println("TEST CHOCIE SYNTAX")
+            if ! validchoice(n)
+                children = elements(n)
+                childnames = map(n -> n.name, children)
+                badlist = join(childnames, ", ")
+                throw(DomainError("Invalid children of `choice` element: $(badlist)"))
+            end
         end
 
 		children = nodes(n)
