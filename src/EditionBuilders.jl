@@ -4,14 +4,21 @@ using Documenter, DocStringExtensions
 using EzXML
 using CitableText
 
-export EditionBuilder, LiteralTextBuilder, MidDiplomaticBuilder
+# Abstractions of the `EditionBuilder` trait.
+export EditionBuilder
 export editednode
-export acceptedElementNames, validelname, usageerrors
+export validElementNames, validelname
+# Implementations
+export LiteralTextBuilder
+export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
+
 
 "An abstract type for orthographic systems."
 abstract type EditionBuilder end
 
 include("literaltext.jl")
 include("midbasic.jl")
+include("middipl.jl")
+include("midnormed.jl")
 
 end # module

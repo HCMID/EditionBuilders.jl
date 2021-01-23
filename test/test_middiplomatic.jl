@@ -1,8 +1,5 @@
 
-@testset "Test valid element names" begin
+@testset "Test construction of MidDiplomaticBuilder" begin
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-    @test supertype(typeof(bldr)) == EditionBuilder
-
-    @test validelname(bldr, "p")
-    @test validelname(bldr, "fake") == false
+    @test supertype(typeof(bldr)) == MidBasicBuilder
 end

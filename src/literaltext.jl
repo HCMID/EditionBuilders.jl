@@ -24,11 +24,11 @@ end
 
 "True if elname is a valid name for an XML element in the given Edition Builder."
 function validelname(builder::EditionBuilder, elname::AbstractString)::Bool
-    elname in acceptedElementNames(builder)
+    elname in validElementNames(builder)
 end
 
 """No element names are accepted by default. 
 Subtypes of `EditionBuilder` must implement this function appropriately."""
-function acceptedElementNames(builder::EditionBuilder)
+function validElementNames(builder::EditionBuilder)
     []
 end

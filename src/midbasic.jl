@@ -1,26 +1,12 @@
-# Builders for diplomatic and normalized editions
-# from archival XML following MID standards.
+# Functions shared by builders for diplomatic and normalized editions
+# from archival XML following editorial standards of a basic
+# MID project.
 
-"Builder for reading diplomatic text from TEI XML following MID conventions."
-struct MidDiplomaticBuilder <: EditionBuilder
-    name
-    versionid
-end
+"EditionBuilders sharing editorial conventions of a basic MID project."
+abstract type MidBasicBuilder <: EditionBuilder end
 
-"Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
-function editednode(builder::MidDiplomaticBuilder, citablenode::CitableNode)
-    doc = parsexml(citablenode.text)
-    txt = root(doc).content
-    #CitableNode(addversion(citablenode.urn, builder.versionid), txt)
-end
-
-
-"Generic validator accepting any XML element in the text of `citablenode`."
-function badusage(builder::MidDiplomaticBuilder, citablenode::CitableNode)
-    []
-end
-
-function acceptedElementNames(builder::MidDiplomaticBuilder)
+"Valid element names in `MidDiplomaticReader` and `MidNormalizedReader`."
+function validElementNames(builder::MidBasicBuilder)
     [
         "p","l", # internal structure of citable units
         "unclear", "gap", # transcription level
@@ -32,9 +18,7 @@ function acceptedElementNames(builder::MidDiplomaticBuilder)
     ]
 end
 
-function validelname(builder::MidDiplomaticBuilder, elname::AbstractString)
-    elname in acceptedElementNames(builder)
-end
-
-function usageerrors(builder::MidDiplomaticBuilder, citablenode::CitableNode)
+"True if `elname` is a valid element name in an `MidBasicBuilder`."
+function validelname(builder::MidBasicBuilder, elname::AbstractString)
+    elname in validElementNames(builder)
 end
