@@ -3,3 +3,12 @@
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
     @test supertype(typeof(bldr)) == MidBasicBuilder
 end
+
+@testset "Test collecting diplomatic text" begin
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+    doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
+    n = root(doc)
+    @test diplomatic(bldr, n) == "HELP"
+end
+
+

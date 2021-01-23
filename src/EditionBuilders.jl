@@ -8,6 +8,7 @@ using CitableText
 export EditionBuilder
 export editednode
 export validElementNames, validelname
+export diplomatic
 # Implementations
 export LiteralTextBuilder
 export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
@@ -16,6 +17,7 @@ export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
 "An abstract type for orthographic systems."
 abstract type EditionBuilder end
 
+include("utils.jl")
 include("literaltext.jl")
 include("midbasic.jl")
 include("middipl.jl")
