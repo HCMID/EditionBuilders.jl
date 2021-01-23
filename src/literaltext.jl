@@ -17,7 +17,7 @@ end
 
 
 "Generic validator accepting any XML element in the text of `citablenode`."
-function badusage(builder::LiteralTextBuilder, citablenode::CitableNode)
+function usageerrors(builder::LiteralTextBuilder, citablenode::CitableNode)
     []
 end
 

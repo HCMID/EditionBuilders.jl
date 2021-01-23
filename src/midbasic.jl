@@ -22,6 +22,7 @@ end
 
 function acceptedElementNames(builder::MidDiplomaticBuilder)
     [
+        "p","l", # internal structure of citable units
         "unclear", "gap", # transcription level
         "w", "num", # tokenization
         "del", "add", # scribal modification
@@ -31,7 +32,9 @@ function acceptedElementNames(builder::MidDiplomaticBuilder)
     ]
 end
 
+function validelname(builder::MidDiplomaticBuilder, elname::AbstractString)
+    elname in acceptedElementNames(builder)
+end
 
-
-
-
+function usageerrors(builder::MidDiplomaticBuilder, citablenode::CitableNode)
+end
