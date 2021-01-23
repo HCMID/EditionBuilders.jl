@@ -58,6 +58,10 @@ function editedelement(builder::MidBasicBuilder, el, accum)
             #push!(rslts, chosen)
             chosen
         end
+    #= Other special cases:
+    - w for tokenization.  Collect and squeeze?
+    =#
+
     else
         children = nodes(el)
         if !(isempty(children))
