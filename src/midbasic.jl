@@ -22,3 +22,22 @@ end
 function validelname(builder::MidBasicBuilder, elname::AbstractString)
     elname in validElementNames(builder)
 end
+
+"True if syntax of `n` is valid for contents of a TEI `choice`."
+function validchoice(n::EzXML.Node)
+    if n.name == "choice" && countelements(n) == 2
+        children = elements(n)
+        childnames = map(n -> n.name, children)
+        
+        validpairs = [
+            ["abbr", "expan"],
+            ["orig", "reg"],
+            ["sic", "corr"]
+        ]
+        checked = map(check -> isempty(setdiff(check, childnames)), validpairs)
+        true in checked
+
+    else 
+        false
+    end
+end
