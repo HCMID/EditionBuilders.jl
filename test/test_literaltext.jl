@@ -18,3 +18,10 @@ end
     expectedtext = "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :"
     @test edited.text == expectedtext
 end
+
+@testset "Test collecting diplomatic text" begin
+    bldr = LiteralTextBuilder("Literal text", "raw")
+    doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
+    n = root(doc)
+    @test editedtext(bldr, n) == "Dr.Doctor"
+end

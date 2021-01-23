@@ -14,3 +14,45 @@ function editednode(builder::LiteralTextBuilder, citablenode::CitableNode)
     txt = root(doc).content
     CitableNode(addversion(citablenode.urn, builder.versionid), txt)
 end
+
+
+"Generic validator accepting any XML element in the text of `citablenode`."
+function usageerrors(builder::LiteralTextBuilder, citablenode::CitableNode)
+    []
+end
+
+
+"True if elname is a valid name for an XML element in the given Edition Builder."
+function validelname(builder::EditionBuilder, elname::AbstractString)::Bool
+    elname in validElementNames(builder)
+end
+
+"""No element names are accepted by default. 
+Subtypes of `EditionBuilder` must implement this function appropriately."""
+function validElementNames(builder::EditionBuilder)
+    []
+end
+
+"Compose text content from an XML node using a LiteralTextBuilder."
+function editedtext(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
+	rslts = [accum]
+	if n.type == EzXML.ELEMENT_NODE 
+		children = nodes(n)
+		if !(isempty(children))
+			for c in children
+				childres =  editedtext(builder, c, accum)
+			 	push!(rslts, childres)
+			end
+		end
+			
+	elseif 	n.type == EzXML.TEXT_NODE
+		tidier = cleanws(n.content )#
+		if !isempty(tidier)
+			push!(rslts, accum * tidier)
+		end
+				
+    else
+        throw(DomainError("Unrecognized node type for node $(n.type)"))
+	end
+	join(rslts,"")
+end
