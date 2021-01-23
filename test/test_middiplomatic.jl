@@ -9,7 +9,7 @@ end
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
     #@test editedtext(bldr, n) == "Dr."
-    editedtext(bldr, n)
+    EditionBuilders.editedelement(bldr, n, "")
 end
 
 

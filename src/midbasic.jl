@@ -42,6 +42,33 @@ function validchoice(n::EzXML.Node)
     end
 end
 
+"Compose edited text of a given XML element using a given builder."
+function editedelement(builder::MidBasicBuilder, el, accum)
+    if ! validelname(builder, el.name)
+        throw(DomainError("Invalid element $(n.name)."))
+    end
+    if el.name == "choice"
+        if ! validchoice(el)
+            children = elements(el)
+            childnames = map(n -> n.name, children)
+            badlist = join(childnames, ", ")
+            throw(DomainError("Invalid children of `choice` element: $(badlist)"))
+        else
+            chosen = TEIchoice(builder, el)
+            #push!(rslts, chosen)
+            chosen
+        end
+    else
+        children = nodes(el)
+        if !(isempty(children))
+            for c in children
+                childres =  editedtext(builder, c, accum)
+                #push!(rslts, childres)
+                childres
+            end
+        end
+    end
+end
 
 """Walk parsed XML tree and compose diplomatic text.
 `n` is a parsed Node.  `accum` is the accumulation of any
@@ -50,28 +77,11 @@ text already seen and collected.
 function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
-        if ! validelname(builder, n.name)
-            throw(DomainError("Invalid element $(n.name)."))
-        end
-        if n.name == "choice"
-            if ! validchoice(n)
-                children = elements(n)
-                childnames = map(n -> n.name, children)
-                badlist = join(childnames, ", ")
-                throw(DomainError("Invalid children of `choice` element: $(badlist)"))
-            end
-        end
+        elresults = editedelement(builder, n, accum)
+        push!(rslts, elresults)
 
-		children = nodes(n)
-		if !(isempty(children))
-			for c in children
-				childres =  editedtext(builder, c, accum)
-			 	push!(rslts, childres)
-			end
-		end
-			
 	elseif 	n.type == EzXML.TEXT_NODE
-		tidier = cleanws(n.content )#
+		tidier = cleanws(n.content )
 		if !isempty(tidier)
 			push!(rslts, accum * tidier)
 		end
