@@ -6,9 +6,9 @@ using CitableText
 
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
-export editednode
+export editedtext, editednode, edition
 export validElementNames, validelname
-export edition
+
 # Implementations
 export LiteralTextBuilder
 export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder

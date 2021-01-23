@@ -5,3 +5,8 @@ function cleanws(s)
     reducedws = replace(rmnls, r"[ \t]+" => " ")
     strip(reducedws) 
 end
+
+"Edit all citable nodes using a given builder."
+function edition(builder::EditionBuilder, c::CitableCorpus)
+    ""
+end

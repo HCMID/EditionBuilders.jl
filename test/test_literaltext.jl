@@ -23,5 +23,5 @@ end
     bldr = LiteralTextBuilder("Literal text", "raw")
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
-    @test edition(bldr, n) == "Dr.Doctor"
+    @test editedtext(bldr, n) == "Dr.Doctor"
 end

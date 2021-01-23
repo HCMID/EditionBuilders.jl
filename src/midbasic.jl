@@ -47,13 +47,20 @@ end
 `n` is a parsed Node.  `accum` is the accumulation of any
 text already seen and collected.
 """
-function edition(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
+function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
-	if n.type == EzXML.ELEMENT_NODE 
+    if n.type == EzXML.ELEMENT_NODE 
+        if ! validelname(builder, n.name)
+            throw(DomainError("Invalid element $(n.name)."))
+        end
+        if n.name == "choice"
+            println("TEST CHOCIE SYNTAX")
+        end
+
 		children = nodes(n)
 		if !(isempty(children))
 			for c in children
-				childres =  edition(builder, c, accum)
+				childres =  editedtext(builder, c, accum)
 			 	push!(rslts, childres)
 			end
 		end

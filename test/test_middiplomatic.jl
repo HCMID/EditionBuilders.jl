@@ -8,7 +8,8 @@ end
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
-    #@test edition(bldr, n) == "Dr."
+    #@test editedtext(bldr, n) == "Dr."
+    editedtext(bldr, n)
 end
 
 

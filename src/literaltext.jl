@@ -33,14 +33,14 @@ function validElementNames(builder::EditionBuilder)
     []
 end
 
-
-function edition(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
+"Compose text content from an XML node using a LiteralTextBuilder."
+function editedtext(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
 	if n.type == EzXML.ELEMENT_NODE 
 		children = nodes(n)
 		if !(isempty(children))
 			for c in children
-				childres =  edition(builder, c, accum)
+				childres =  editedtext(builder, c, accum)
 			 	push!(rslts, childres)
 			end
 		end
