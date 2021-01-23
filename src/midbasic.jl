@@ -106,3 +106,12 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::Abstra
 	end
 	join(rslts,"")
 end
+
+"Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
+function editednode(builder::MidBasicBuilder, citablenode::CitableNode)
+    nd  = root(parsexml(citablenode.text))
+    txt = editedtext(builder, nd)
+    CitableNode(addversion(citablenode.urn, builder.versionid), txt)
+end
+
+

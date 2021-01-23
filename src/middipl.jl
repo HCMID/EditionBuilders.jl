@@ -5,14 +5,6 @@ struct MidDiplomaticBuilder <: MidBasicBuilder
     versionid
 end
 
-
-"Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
-function editednode(builder::MidDiplomaticBuilder, citablenode::CitableNode)
-    nd  = root(parsexml(citablenode.text))
-    txt = editedtext(builder, nd)
-    CitableNode(addversion(citablenode.urn, builder.versionid), txt)
-end
-
 "Make diplomatic choice of MID-legal TEI choice."
 function TEIchoice(builder::MidDiplomaticBuilder, n)
     #= Account for:

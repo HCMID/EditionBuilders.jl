@@ -23,4 +23,11 @@ include("midbasic.jl")
 include("middipl.jl")
 include("midnormed.jl")
 
+
+"Edit all citable nodes using a given builder."
+function edition(builder::EditionBuilder, c::CitableCorpus)
+    nodes = map(cn -> editednode(builder, cn), c.corpus)
+    CitableCorpus(nodes)
+end
+
 end # module
