@@ -35,5 +35,14 @@ end
     doc = parsexml("<choice><add>Doctor</add><del>Dr.</del></choice>")
     n = root(doc)
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-    #@test_throws  DomainError("Invalid children of `choice` element: add, del") editedtext(bldr, n) 
+    @test_throws  DomainError("Invalid children of `choice` element: add, del") editedtext(bldr, n) 
+end
+
+@testset "Test tokenization of TEI w element" begin
+    raw = """<p>A bunch of <w><unclear>ha</unclear>
+    rd</w> to read stuff.</p>"""
+    doc = parsexml(raw)
+    n = root(doc)
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+    @test editedtext(bldr, n) == "A bunch of hard to read stuff."
 end

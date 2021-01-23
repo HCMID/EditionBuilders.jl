@@ -47,6 +47,8 @@ function editedelement(builder::MidBasicBuilder, el, accum)
     if ! validelname(builder, el.name)
         throw(DomainError("Invalid element $(n.name)."))
     end
+
+    reply = []
     if el.name == "choice"
         if ! validchoice(el)
             children = elements(el)
@@ -55,30 +57,39 @@ function editedelement(builder::MidBasicBuilder, el, accum)
             throw(DomainError("Invalid children of `choice` element: $(badlist)"))
         else
             chosen = TEIchoice(builder, el)
-            #push!(rslts, chosen)
-            chosen
+            push!(reply, chosen)
         end
-    #= Other special cases:
-    - w for tokenization.  Collect and squeeze?
-    =#
+
+    elseif el.name == "w"
+        # collect and squeeze:
+        children = nodes(el)
+        wordparts = []
+        for c in children
+            childres = editedtext(builder, c, "")
+            push!(wordparts, childres)
+        end
+        # single token padded by ws:
+        singletoken = replace(join(wordparts,""), r"[ ]+" => "")
+        push!(reply, " $(singletoken) ")
+   
 
     else
         children = nodes(el)
         if !(isempty(children))
             for c in children
                 childres =  editedtext(builder, c, accum)
-                #push!(rslts, childres)
-                childres
+                push!(reply, childres)
             end
         end
     end
+    join(reply,"")
 end
 
 """Walk parsed XML tree and compose diplomatic text.
 `n` is a parsed Node.  `accum` is the accumulation of any
 text already seen and collected.
 """
-function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
+function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::AbstractString
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedelement(builder, n, accum)
@@ -95,4 +106,3 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
 	end
 	join(rslts,"")
 end
-
