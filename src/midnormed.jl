@@ -4,16 +4,12 @@ struct MidNormalizedBuilder <: MidBasicBuilder
     versionid
 end
 
-
-
-
 "Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
 function editednode(builder::MidNormalizedBuilder, citablenode::CitableNode)
     doc = parsexml(citablenode.text)
     txt = root(doc).content
     #CitableNode(addversion(citablenode.urn, builder.versionid), txt)
 end
-
 
 function TEIchoice(builder::MidNormalizedBuilder, n)
 

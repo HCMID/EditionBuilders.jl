@@ -43,5 +43,30 @@ function validchoice(n::EzXML.Node)
 end
 
 
-
+"""Walk parsed XML tree and compose diplomatic text.
+`n` is a parsed Node.  `accum` is the accumulation of any
+text already seen and collected.
+"""
+function diplomatic(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
+	rslts = [accum]
+	if n.type == EzXML.ELEMENT_NODE 
+		children = nodes(n)
+		if !(isempty(children))
+			for c in children
+				childres =  diplomatic(builder, c, accum)
+			 	push!(rslts, childres)
+			end
+		end
+			
+	elseif 	n.type == EzXML.TEXT_NODE
+		tidier = cleanws(n.content )#
+		if !isempty(tidier)
+			push!(rslts, accum * tidier)
+		end
+				
+    else
+        throw(DomainError("Unrecognized node type for node $(n.type)"))
+	end
+	join(rslts,"")
+end
 
