@@ -47,13 +47,13 @@ end
 `n` is a parsed Node.  `accum` is the accumulation of any
 text already seen and collected.
 """
-function diplomatic(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
+function edition(builder::MidBasicBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
 	if n.type == EzXML.ELEMENT_NODE 
 		children = nodes(n)
 		if !(isempty(children))
 			for c in children
-				childres =  diplomatic(builder, c, accum)
+				childres =  edition(builder, c, accum)
 			 	push!(rslts, childres)
 			end
 		end

@@ -8,7 +8,7 @@ using CitableText
 export EditionBuilder
 export editednode
 export validElementNames, validelname
-export diplomatic
+export edition
 # Implementations
 export LiteralTextBuilder
 export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
