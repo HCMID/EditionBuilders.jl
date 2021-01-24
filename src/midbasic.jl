@@ -8,8 +8,8 @@ abstract type MidBasicBuilder <: EditionBuilder end
 "Valid element names in `MidDiplomaticReader` and `MidNormalizedReader`."
 function validElementNames(builder::MidBasicBuilder)
     [
-        "p","l", # internal structure of citable units
-        "unclear", "gap", # transcription level
+        "p","l", "ab", # internal structure of citable units
+        "unclear", "gap", "supplied", # transcription level
         "w", "num", # tokenization
         "del", "add", # scribal modification
         "choice", "abbr", "expan",  "orig", "reg", "sic", "corr", #choices
@@ -72,6 +72,8 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         singletoken = replace(join(wordparts,""), r"[ ]+" => "")
         push!(reply, " $(singletoken) ")
    
+    elseif skipelement(builder, el.name)
+        # do nothing
 
     else
         children = nodes(el)

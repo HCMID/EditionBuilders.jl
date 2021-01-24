@@ -32,3 +32,7 @@ function TEIchoice(builder::MidNormalizedBuilder, n)
         throw(DomainError(msg))
     end
 end
+
+function skipelement(builder::MidNormalizedBuilder,elname)
+    elname in ["del"]
+end

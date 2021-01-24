@@ -34,3 +34,7 @@ function TEIchoice(builder::MidDiplomaticBuilder, n)
     end
 end
 
+
+function skipelement(builder::MidDiplomaticBuilder,elname)
+    elname in ["add", "supplied"]
+end
