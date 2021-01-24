@@ -45,7 +45,7 @@ end
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidBasicBuilder, el, accum)
     if ! validelname(builder, el.name)
-        throw(DomainError("Invalid element $(n.name)."))
+        throw(DomainError("Invalid element $(el.name)."))
     end
 
     reply = []
