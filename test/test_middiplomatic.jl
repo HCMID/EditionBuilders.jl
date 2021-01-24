@@ -28,3 +28,16 @@ end
 
 
 
+
+@testset "Test tokenization of TEI w and supplied elements" begin
+    raw = """<p>A bunch of <w><unclear>ha</unclear>
+    rd</w> to read stuff.</p>"""
+    doc = parsexml(raw)
+    n = root(doc)
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+    @test editedtext(bldr, n) == "A bunch of hard to read stuff."
+
+    raw2 = "<ab n=\"3\">tideimi : hrppi : ladi : se <w>tide<supplied>imi</supplied></w></ab>"
+    n2 = root(parsexml(raw2))
+    @test editedtext(bldr, n2) == "tideimi : hrppi : ladi : se tide "
+end
