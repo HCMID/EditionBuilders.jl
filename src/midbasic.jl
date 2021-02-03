@@ -9,6 +9,7 @@ abstract type MidBasicBuilder <: EditionBuilder end
 function validElementNames(builder::MidBasicBuilder)
     [
         "p","l", "ab", # internal structure of citable units
+        "head", # title of citable unit
         "unclear", "gap", "supplied", # transcription level
         "w", "num", # tokenization
         "del", "add", # scribal modification
