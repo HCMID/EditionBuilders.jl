@@ -15,7 +15,7 @@ function validElementNames(builder::MidBasicBuilder)
         "del", "add", # scribal modification
         "choice", "abbr", "expan",  "orig", "reg", "sic", "corr", #choices
         "persName", "placeName", "rs", # NE disambiguation
-        "q", "cit", "title" # discourse analysis
+        "q", "cit", "ref", "title" # discourse analysis
     ]
 end
 
