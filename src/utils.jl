@@ -5,3 +5,9 @@ function cleanws(s)
     reducedws = replace(rmnls, r"[ \t]+" => " ")
     strip(reducedws) 
 end
+
+function ezxmlstring(n::EzXML.Node)
+	ibuff = IOBuffer()
+	print(ibuff, n)
+	String(take!(ibuff))
+end

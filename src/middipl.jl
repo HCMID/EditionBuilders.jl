@@ -29,7 +29,7 @@ function TEIchoice(builder::MidDiplomaticBuilder, n)
 
 
     else
-        msg = "Invalid syntax for choice element with children " * join(childnames, ", ")
+        msg = "Invalid syntax for choice element with children " * join(childnames, ", ") * " in " * ezxmlstring(n)
         throw(DomainError(msg))
     end
 end

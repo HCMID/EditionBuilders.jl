@@ -28,7 +28,10 @@ function TEIchoice(builder::MidNormalizedBuilder, n)
 
 
     else
-        msg = "Invalid syntax for choice element with children " * join(childnames, ", ")
+        nameslist = join(childnames, ", ")
+        x = ezxmlstring(n)
+        msg =  "Invalid syntax for choice element with children $(nameslist) in $(x)"
+  
         throw(DomainError(msg))
     end
 end

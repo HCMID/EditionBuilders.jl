@@ -46,7 +46,11 @@ end
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidBasicBuilder, el, accum)
     if ! validelname(builder, el.name)
-        throw(DomainError("Invalid element $(el.name)."))
+        str = ezxmlstring(el)
+        msg = "Invalid element $(el.name) in $(str)"
+        throw(DomainError(msg))
+
+
     end
 
     reply = []
@@ -55,7 +59,9 @@ function editedelement(builder::MidBasicBuilder, el, accum)
             children = elements(el)
             childnames = map(n -> n.name, children)
             badlist = join(childnames, ", ")
-            throw(DomainError("Invalid children of `choice` element: $(badlist)"))
+            msg = "Invalid children of `choice` element: $(badlist) in  $(ezxmlstring(el))"
+            throw(DomainError(msg))
+            
         else
             chosen = TEIchoice(builder, el)
             push!(reply, chosen)
