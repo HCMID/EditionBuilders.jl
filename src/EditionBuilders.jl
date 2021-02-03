@@ -12,7 +12,7 @@ export validElementNames, validelname
 # Implementations
 export LiteralTextBuilder
 export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
-
+export ezxmlstring
 
 "An abstract type for orthographic systems."
 abstract type EditionBuilder end
