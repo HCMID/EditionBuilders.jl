@@ -12,7 +12,7 @@ function validElementNames(builder::MidBasicBuilder)
         "ab", "div", "list", "item", # internal structure of citable units 
         "figure", "figDesc", "floatingText", "body", #internal structure of text associated with figure"
         "unclear", "gap", "supplied", # transcription level
-        "w", "num", # tokenization
+        "w", "num", "foreign", # tokenization
         "del", "add", # scribal modification
         "choice", "abbr", "expan",  "orig", "reg", "sic", "corr", #choices
         "persName", "placeName", "rs", # NE disambiguation
