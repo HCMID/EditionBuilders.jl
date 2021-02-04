@@ -90,7 +90,7 @@ function editedelement(builder::MidBasicBuilder, el, accum)
             end
         end
     end
-    join(reply,"")
+    strip(join(reply," "))
 end
 
 """Walk parsed XML tree and compose diplomatic text.
@@ -108,11 +108,13 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::Abstra
 		if !isempty(tidier)
 			push!(rslts, accum * tidier)
 		end
-				
+                
+    elseif n.type == EzXML.COMMENT_NODE
+        # do nothing
     else
         throw(DomainError("Unrecognized node type for node $(n.type)"))
 	end
-	join(rslts,"")
+	strip(join(rslts," "))
 end
 
 "Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."

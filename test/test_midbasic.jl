@@ -41,3 +41,11 @@ end
 
 
 
+
+@testset "Comments are passed over" begin
+    doc = parsexml("<p>Word 1 <!-- there are two --> word 2</p>")
+    n = root(doc)
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+    @test editedtext(bldr, n) == "Word 1 word 2"
+
+end
