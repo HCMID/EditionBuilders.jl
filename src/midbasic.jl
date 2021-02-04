@@ -93,9 +93,9 @@ function editedelement(builder::MidBasicBuilder, el, accum)
     strip(join(reply," "))
 end
 
-"""Walk parsed XML tree and compose diplomatic text.
-`n` is a parsed Node.  `accum` is the accumulation of any
-text already seen and collected.
+"""Walk parsed XML tree and compose a specific edition.
+`builder` is the edition builder to use. `n` is a parsed Node. 
+`accum` is the accumulation of any text already seen and collected.
 """
 function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::AbstractString
 	rslts = [accum]
@@ -114,14 +114,15 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::Abstra
     else
         throw(DomainError("Unrecognized node type for node $(n.type)"))
 	end
-	strip(join(rslts," "))
+    stripped = strip(join(rslts," "))
+    replace(stripped, r"[ \t]+" => " ")
 end
 
 "Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
 function editednode(builder::MidBasicBuilder, citablenode::CitableNode)
     nd  = root(parsexml(citablenode.text))
-    txt = editedtext(builder, nd)
-    CitableNode(addversion(citablenode.urn, builder.versionid), txt)
+    editiontext = editedtext(builder, nd)
+    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
 end
 
 
