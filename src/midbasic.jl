@@ -8,7 +8,7 @@ abstract type MidBasicBuilder <: EditionBuilder end
 "Valid element names in `MidDiplomaticReader` and `MidNormalizedReader`."
 function validElementNames(builder::MidBasicBuilder)
     [
-        "p","l", "ab", # internal structure of citable units
+        "p","l", "ab", "div", # internal structure of citable units
         "head", # title of citable unit
         "unclear", "gap", "supplied", # transcription level
         "w", "num", # tokenization
