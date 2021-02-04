@@ -10,6 +10,7 @@ function validElementNames(builder::MidBasicBuilder)
     [
         "p","l", "head", # citable units
         "ab", "div", "list", "item", # internal structure of citable units 
+        "figure", "figDesc", "floatingText", "body", #internal structure of text associated with figure"
         "unclear", "gap", "supplied", # transcription level
         "w", "num", # tokenization
         "del", "add", # scribal modification
@@ -49,8 +50,6 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         str = ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
         throw(DomainError(msg))
-
-
     end
 
     reply = []
