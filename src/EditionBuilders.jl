@@ -4,6 +4,7 @@ using Documenter, DocStringExtensions
 using EzXML
 using CitableText
 
+
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
 export editedtext, editednode, edition

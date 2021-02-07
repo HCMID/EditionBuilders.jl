@@ -11,3 +11,9 @@ function ezxmlstring(n::EzXML.Node)
 	print(ibuff, n)
 	String(take!(ibuff))
 end
+
+"True if `n` has an attribute named `a`."
+function hasattribute(n, attname::AbstractString)::Bool
+    attnames = map(a -> a.name, attributes(n))
+    attname in attnames
+end

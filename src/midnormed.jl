@@ -37,5 +37,5 @@ function TEIchoice(builder::MidNormalizedBuilder, n)
 end
 
 function skipelement(builder::MidNormalizedBuilder,elname)
-    elname in ["del"]
+    elname in ["del", "ref"]
 end

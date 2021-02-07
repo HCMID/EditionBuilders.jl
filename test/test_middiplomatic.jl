@@ -37,3 +37,18 @@ end
     n2 = root(parsexml(raw2))
     @test editedtext(bldr, n2) == "tideimi : hrppi : ladi : se tide"
 end
+
+@testset "Test rendering of word fragments" begin
+    bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl") 
+    cn1 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:1"),
+        """<ab n="1"><w n="1">tidei</w></ab>"""
+    )
+    cn2 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
+        """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
+    )
+    corpus = CitableCorpus([cn1, cn2])
+    edited = edition(corpus, bldr)
+    @test edited = "something"
+end
