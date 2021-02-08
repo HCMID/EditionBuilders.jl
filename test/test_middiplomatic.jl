@@ -49,6 +49,18 @@ end
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
     corpus = CitableCorpus([cn1, cn2])
-    edited = edition(corpus, bldr)
-    @test edited = "something"
+    edited = edition(bldr, corpus)
+    @test length(edited.corpus)  == 2
+
+    dipl1 =  CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.dipl:1"),
+        """tidei"""
+    )
+    @test edited.corpus[1] == dipl1
+
+    dipl2 =  CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.dipl:2"),
+        """mi : hrppi"""
+    )
+   
 end
