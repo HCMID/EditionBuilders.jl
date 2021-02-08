@@ -47,6 +47,9 @@ function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
     psgids =  map(cn -> passagecomponent(cn.urn), nodes)
     wstokens = map(cn -> split(cn.text," "), nodes)
 
+
+    # Build up a dictionary of passages with trailing
+    # word fragments.
     frag = r"^\+\+(.+)\+\+$"
     trailers = []
     for i in 1:length(psgids)
@@ -56,7 +59,11 @@ function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
             push!(trailers, (psgids[i], tobecontinued))
         end
     end
-    Dict(trailers)
+    trailerdict = Dict(trailers)
+    # Now look at passages with initial wordfragments,
+    # and update dictionary.
     wstokens
+
+    # Finally, compose new corpus
     #CitableCorpus(tidied)
 end
