@@ -39,3 +39,24 @@ end
 function skipelement(builder::MidNormalizedBuilder,elname)
     elname in ["del", "ref"]
 end
+
+
+function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
+    nodes = map(cn -> editednode(builder, cn), c.corpus)
+    
+    psgids =  map(cn -> passagecomponent(cn.urn), nodes)
+    wstokens = map(cn -> split(cn.text," "), nodes)
+
+    frag = r"^\+\+(.+)\+\+$"
+    trailers = []
+    for i in 1:length(psgids)
+        tkns = wstokens[i]
+        if occursin(frag, tkns[end])
+            tobecontinued = match(frag, tkns[end]).captures[1] * "+"
+            push!(trailers, (psgids[i], tobecontinued))
+        end
+    end
+    Dict(trailers)
+    wstokens
+    #CitableCorpus(tidied)
+end
