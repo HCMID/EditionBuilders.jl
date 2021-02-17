@@ -36,5 +36,16 @@ end
 
 
 function skipelement(builder::MidDiplomaticBuilder,elname)
-    elname in ["add", "supplied"]
+    elname in ["add", "supplied", "ref"]
+end
+
+function tidyFrag(cn::CitableNode)
+    newtext = replace(cn.text, "++" => "")
+    CitableNode(cn.urn, newtext)
+end
+
+function edition(builder::MidDiplomaticBuilder, c::CitableCorpus)
+    nodes = map(cn -> editednode(builder, cn), c.corpus)
+    tidied = map(cn -> tidyFrag(cn),nodes)
+    CitableCorpus(tidied)
 end

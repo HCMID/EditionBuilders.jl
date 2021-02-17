@@ -53,7 +53,10 @@ function editedelement(builder::MidBasicBuilder, el, accum)
     end
 
     reply = []
-    if el.name == "choice"
+    if el.name == "foreign"
+        push!(reply, "«" * el.content * "»")
+
+    elseif el.name == "choice"
         if ! validchoice(el)
             children = elements(el)
             childnames = map(n -> n.name, children)
@@ -67,6 +70,8 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         end
 
     elseif el.name == "w"
+
+        
         # collect and squeeze:
         children = nodes(el)
         wordparts = []
@@ -76,8 +81,16 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         end
         # single token padded by ws:
         singletoken = replace(join(wordparts,""), r"[ ]+" => "")
-        push!(reply, " $(singletoken) ")
-   
+        # check for word-fragment convention:
+        # `w` with `@n` attribute:
+        # mark for subsequent peek-ahead
+        if hasattribute(el, "n")
+            push!(reply, " ++$(singletoken)++ ")
+        else
+            push!(reply, " $(singletoken) ")
+        end
+        
+        
     elseif skipelement(builder, el.name)
         # do nothing
 
