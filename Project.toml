@@ -11,7 +11,7 @@ EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-CitableText = "0.5"
+CitableText = "0.4, 0.5"
 DocStringExtensions = "0.8"
 Documenter = "0.26"
 EzXML = "1.1"
