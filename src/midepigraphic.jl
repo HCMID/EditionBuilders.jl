@@ -1,11 +1,11 @@
 "Builder for reading diplomatic text from TEI XML following MID conventions."
-struct MidNormalizedBuilder <: MidBasicBuilder
+struct MidEpigraphicBuilder <: MidBasicBuilder
     name
     versionid
 end
 
 "Make normalized choice of MID-legal TEI choice."
-function TEIchoice(builder::MidNormalizedBuilder, n)
+function TEIchoice(builder::MidEpigraphicBuilder, n)
     #= Account for:
         abbr/expan
         orig/reg
@@ -36,18 +36,12 @@ function TEIchoice(builder::MidNormalizedBuilder, n)
     end
 end
 
-function skipelement(builder::MidNormalizedBuilder,elname)
+function skipelement(builder::MidEpigraphicBuilder,elname)
     elname in ["del", "ref"]
 end
 
-function edition(builder::MidDiplomaticBuilder, c::CitableCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.corpus)
-    #tidied = map(cn -> tidyFrag(cn),nodes)
-    CitableCorpus(nodes)
-end
 
-#=
-function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
+function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
     nodes = map(cn -> editednode(builder, cn), c.corpus)
     
     psgids =  map(cn -> passagecomponent(cn.urn), nodes)
@@ -72,5 +66,5 @@ function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
 
     # Finally, compose new corpus
     CitableCorpus(tidied)
-end=#
+end
 
