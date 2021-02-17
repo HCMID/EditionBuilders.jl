@@ -38,6 +38,7 @@ end
     @test editedtext(bldr, n2) == "tideimi : hrppi : ladi : se tide"
 end
 
+#=
 @testset "Test rendering of word fragments" begin
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl") 
     cn1 = CitableNode(
@@ -62,5 +63,5 @@ end
         CtsUrn("urn:cts:lycian:tl.t3.dipl:2"),
         """mi : hrppi"""
     )
-   
 end
+=#
