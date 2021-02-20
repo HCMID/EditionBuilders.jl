@@ -39,5 +39,6 @@ bldr = MidNormalizedBuilder("Normalized edition", "normed")
     )
     corpus = CitableCorpus([cn1, cn2])
     edited = edition(bldr, corpus)
+    
     #@test edited = "something"
 end
