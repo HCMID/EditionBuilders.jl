@@ -1,4 +1,4 @@
-"Builder for reading diplomatic text from TEI XML following MID conventions."
+"Builder for reading normalized text from TEI XML following MID conventions."
 struct MidEpigraphicBuilder <: MidBasicBuilder
     name
     versionid
@@ -40,8 +40,43 @@ function skipelement(builder::MidEpigraphicBuilder,elname)
     elname in ["del", "ref"]
 end
 
+"Build a dictionary of line-spanning word fragments."
+function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
+    fragments = Dict()
+    # Build dictionary of fragemented words
+    for n in c.corpus
+        nroot = parsexml(n.text).root
+        wds = findall("//w", nroot)
+        for wd in wds
+            attnames = map(att -> att.name, attributes(wds[1]))
+            if "n" in attnames
+                nval = wd["n"]
+                wtext = EditionBuilders.collectw(wd, builder)
+                #println("WORD FRAG: " * nval * " with text " * wtext)
+                if nval in keys(fragments)
+                    #println("MODIFY")
+                    fragments[nval] = fragments[nval] * "-" * wtext
+                else
+                    
+                    #println("ADD " * wtext)
+                    fragments[nval] = wtext
+                end
+            else
+                #println("Wrapper only")
+            end
+        end
+    end
+    fragments
+end
+
 
 function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
+    # First, build a dictionary of word fragments
+    fragments = fragmentsDictionary(builder, c)
+    
+
+
+    #=
     nodes = map(cn -> editednode(builder, cn), c.corpus)
     
     psgids =  map(cn -> passagecomponent(cn.urn), nodes)
@@ -66,5 +101,6 @@ function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
 
     # Finally, compose new corpus
     CitableCorpus(tidied)
+    =#
 end
 

@@ -13,6 +13,7 @@ export validElementNames, validelname
 # Implementations
 export LiteralTextBuilder
 export MidBasicBuilder, MidDiplomaticBuilder, MidNormalizedBuilder
+export MidEpigraphicBuilder
 export ezxmlstring
 
 "An abstract type for orthographic systems."
@@ -23,6 +24,7 @@ include("literaltext.jl")
 include("midbasic.jl")
 include("middipl.jl")
 include("midnormed.jl")
+include("midepigraphic.jl")
 
 
 "Edit all citable nodes using a given builder."
