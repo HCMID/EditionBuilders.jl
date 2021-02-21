@@ -67,3 +67,25 @@ end
     )
     =#
 end
+
+@testset "Test multiline line crossing text" begin 
+    cn1 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:1"),
+        """<ab n="1"><w>eb<unclear>A</unclear>Nn<supplied>E</supplied></w> prNnawA : <w>me=<supplied>t</supplied>i</w></ab>""")
+    cn2 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
+        """<ab n="2">prNnawatE : <persName><w>telex<unclear>o</unclear>zi</w></persName> : <w>hrp<supplied>p</supplied>i</w></ab>""")
+    cn3 = CitableNode(
+            CtsUrn("urn:cts:lycian:tl.t3.test:2"),
+            """<ab n="3"><w>l<supplied>a</supplied>di</w> : <w>ehb<supplied>i</supplied></w> : se tideimi se=di</ab>""")
+    cn4 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
+        """<ab n="4">Nta <w><supplied>t</supplied>adE</w> tesi : miNti : <w n="4">alad</w></ab>""")
+    cn5 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
+        """<ab n="5"><w n="4">ehali</w> : adE <num>IIII</num> </ab>""")
+    nodes = [cn1, cn2, cn3, cn4, cn5]
+    corpus = CitableCorpus(nodes)
+end
+
+
