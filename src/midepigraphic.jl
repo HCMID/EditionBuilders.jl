@@ -64,27 +64,7 @@ function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
                 end
             end
         end
-        #=
-        for wd in wds
-            # THIS IS WRONG:
-            attnames = map(att -> att.name, attributes(wds[end]))
-            if "n" in attnames
-                nval = wd["n"]
-                wtext = EditionBuilders.collectw(wd, builder)
-                println("WORD FRAG: " * nval * " with text " * wtext)
-                if nval in keys(fragments)
-                    println("MODIFY")
-                    fragments[nval] = fragments[nval] * "-" * wtext
-                else
-                    
-                    println("ADD " * wtext)
-                    fragments[nval] = wtext
-                end
-            else
-                #println("Wrapper only")
-            end
-        end
-        =#
+
     end
     fragments
 end
@@ -93,7 +73,7 @@ end
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum)
     nowseen = seen
-    println("Editing ", el.name, " with seen ", seen)
+    #println("Editing ", el.name, " with seen ", seen)
     if ! validelname(builder, el.name)
         str = ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
@@ -139,7 +119,13 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
             else
                 push!(reply, collectw(el, builder))
             end
+        else
+            # Regular word wrapper
+            push!(reply, collectw(el, builder))
         end
+    
+    
+    
         
     elseif skipelement(builder, el.name)
         # do nothing
