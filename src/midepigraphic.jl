@@ -47,12 +47,13 @@ function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
     for n in c.corpus
         nroot = parsexml(n.text).root
         wds = findall("//w", nroot)
-        for wd in wds
-            attnames = map(att -> att.name, attributes(wds[1]))
+        #println(string("FOUND words " , length(wds)))
+        for w in wds
+            attnames = map(att -> att.name, attributes(w))
             if "n" in attnames
-                nval = wd["n"]
-                wtext = EditionBuilders.collectw(wd, builder)
-                #println("WORD FRAG: " * nval * " with text " * wtext)
+                nval = w["n"]
+                wtext = EditionBuilders.collectw(w, builder)
+                #println("\tThis one has nval " * nval)
                 if nval in keys(fragments)
                     #println("MODIFY")
                     fragments[nval] = fragments[nval] * "-" * wtext
@@ -61,10 +62,29 @@ function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
                     #println("ADD " * wtext)
                     fragments[nval] = wtext
                 end
+            end
+        end
+        #=
+        for wd in wds
+            # THIS IS WRONG:
+            attnames = map(att -> att.name, attributes(wds[end]))
+            if "n" in attnames
+                nval = wd["n"]
+                wtext = EditionBuilders.collectw(wd, builder)
+                println("WORD FRAG: " * nval * " with text " * wtext)
+                if nval in keys(fragments)
+                    println("MODIFY")
+                    fragments[nval] = fragments[nval] * "-" * wtext
+                else
+                    
+                    println("ADD " * wtext)
+                    fragments[nval] = wtext
+                end
             else
                 #println("Wrapper only")
             end
         end
+        =#
     end
     fragments
 end
@@ -72,8 +92,7 @@ end
 
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum)
-    println("Editing element " * el.name)
-    
+    nowseen = seen
     if ! validelname(builder, el.name)
         str = ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
@@ -98,7 +117,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
         end
 
     elseif el.name == "w"
-        println("SEEING A W")
+        println("SEEING A W and fraglist is ", keys(fragments))
         if hasattribute(el, "n")
             nval = el["n"]
             if nval in seen
@@ -106,7 +125,14 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
             elseif nval in keys(fragments)
                 println("Checking n = " * nval)
                 push!(reply, fragments[nval])
-                push!(seen, nval)
+                if nval in seen
+                    pritnln("\tAlready seen")
+                else
+                    println("\tPushing ", nval)
+                    push!(nowseen, nval)
+                    println("and seen is now ", seen )
+                end
+                
             else
                 push!(reply, collectw(el, builder))
             end
@@ -116,7 +142,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
         # do nothing
 
     else
-        println("Getting epigraphic children.")
+        #println("Getting epigraphic children.")
         children = nodes(el)
         if !(isempty(children))
             for c in children
@@ -125,7 +151,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
             end
         end
     end
-    (strip(join(reply," ")), seen)
+    (strip(join(reply," ")), nowseen)
     
 end
 
@@ -140,12 +166,6 @@ function editednode(
     #editiontext = editedtext(builder, nd)
     rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
-        # CHECK FOR W
-        if n.name == "w"
-            println("CHECK WORD INDEX")
-        else 
-            println("Not a w: " * n.name)
-        end
         elresults = editedelement(builder, n,  fragments, seen, accum)
         push!(rslts, elresults[1])
 
@@ -165,7 +185,9 @@ function editednode(
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
 
-    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    (CitableNode(addversion(citablenode.urn, builder.versionid), editiontext),
+    seen
+    )
 end
 
 
@@ -198,7 +220,13 @@ end
 function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
     # First, build a dictionary of word fragments
     fragments = fragmentsDictionary(builder, c)
-    
+    usedfragments = []
+    nodes = []
+    for cn in c.corpus
+        editedpair = editednode(builder, cn, fragments, usedfragments, "")
+        push!(nodes, editedpair[1])
+        push!(usedfragments, editedpair[2])
+    end
     #nodes = map(cn -> editednode(builder, cn), c.corpus)
     #nd  = root(parsexml(citablenode.text))
     #editiontext = editedtext(builder, nd, fragments)

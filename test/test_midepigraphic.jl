@@ -71,21 +71,25 @@ end
 @testset "Test multiline line crossing text" begin 
     cn1 = CitableNode(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
-        """<ab n="1"><w>eb<unclear>A</unclear>Nn<supplied>E</supplied></w> prNnawA : <w>me=<supplied>t</supplied>i</w></ab>""")
+        """<ab n="1">ebENnE : <w n="1">xo</w></ab>""")
     cn2 = CitableNode(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
-        """<ab n="2">prNnawatE : <persName><w>telex<unclear>o</unclear>zi</w></persName> : <w>hrp<supplied>p</supplied>i</w></ab>""")
+        """<ab n="2"><w n="1">pA</w> : <w>m<unclear>E</unclear>=ne</w> <w n="2">pr</w></ab>""")
     cn3 = CitableNode(
-            CtsUrn("urn:cts:lycian:tl.t3.test:2"),
-            """<ab n="3"><w>l<supplied>a</supplied>di</w> : <w>ehb<supplied>i</supplied></w> : se tideimi se=di</ab>""")
+            CtsUrn("urn:cts:lycian:tl.t3.test:3"),
+            """ <ab n="3"><w n="2">NnawatE</w> : <w n="3">me</w></ab>""")
     cn4 = CitableNode(
-        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
-        """<ab n="4">Nta <w><supplied>t</supplied>adE</w> tesi : miNti : <w n="4">alad</w></ab>""")
+        CtsUrn("urn:cts:lycian:tl.t3.test:4"),
+        """<ab n="4"><w n="3">de</w> : epNnEni</ab>""")
     cn5 = CitableNode(
-        CtsUrn("urn:cts:lycian:tl.t3.test:2"),
-        """<ab n="5"><w n="4">ehali</w> : adE <num>IIII</num> </ab>""")
-    nodes = [cn1, cn2, cn3, cn4, cn5]
+        CtsUrn("urn:cts:lycian:tl.t3.test:5"),
+        """<ab n="5">ehbi : <persName><w n="5"></w>hMprA</persName></ab>""")
+    cn6 = CitableNode(
+        CtsUrn("urn:cts:lycian:tl.t3.test:5"),
+        """<ab n="6"><w n="5">ma</w> : sey=atli</ab>""")
+    nodes = [cn1, cn2, cn3, cn4, cn5, cn6]
     corpus = CitableCorpus(nodes)
+
 end
 
 
