@@ -40,7 +40,7 @@ function skipelement(builder::MidNormalizedBuilder,elname)
     elname in ["del", "ref"]
 end
 
-function edition(builder::MidDiplomaticBuilder, c::CitableCorpus)
+function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
     nodes = map(cn -> editednode(builder, cn), c.corpus)
     #tidied = map(cn -> tidyFrag(cn),nodes)
     CitableCorpus(nodes)

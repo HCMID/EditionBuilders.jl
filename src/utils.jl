@@ -1,3 +1,4 @@
+teins = "http://www.tei-c.org/ns/1.0"
 
 "Minimize whitespace as allowed by XML syntax."
 function cleanws(s)

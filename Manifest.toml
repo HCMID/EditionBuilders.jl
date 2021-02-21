@@ -35,9 +35,9 @@ version = "1.1.0"
 
 [[CitableText]]
 deps = ["BenchmarkTools", "CSV", "CitableBase", "DataFrames", "DocStringExtensions", "Documenter", "HTTP", "Test"]
-git-tree-sha1 = "717cae10c76416054375330b8d8609c61e4a675e"
+git-tree-sha1 = "457b7f9bd625b2988ffc32f59122e778bdee4f2a"
 uuid = "41e66566-473b-49d4-85b7-da83b66615d8"
-version = "0.5.0"
+version = "0.6.0"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]

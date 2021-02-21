@@ -1,4 +1,4 @@
-"Builder for reading diplomatic text from TEI XML following MID conventions."
+"Builder for reading normalized text from TEI XML following MID conventions."
 struct MidEpigraphicBuilder <: MidBasicBuilder
     name
     versionid
@@ -40,31 +40,200 @@ function skipelement(builder::MidEpigraphicBuilder,elname)
     elname in ["del", "ref"]
 end
 
+"Build a dictionary of line-spanning word fragments."
+function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
+    fragments = Dict()
+    # Build dictionary of fragemented words
+    for n in c.corpus
+        nroot = parsexml(n.text).root
+        wds = findall("//w", nroot)
+        #println(string("FOUND words " , length(wds)))
+        for w in wds
+            attnames = map(att -> att.name, attributes(w))
+            if "n" in attnames
+                nval = w["n"]
+                wtext = EditionBuilders.collectw(w, builder)
+                #println("\tThis one has nval " * nval)
+                if nval in keys(fragments)
+                    #println("MODIFY")
+                    fragments[nval] = fragments[nval] * "-" * wtext
+                else
+                    
+                    #println("ADD " * wtext)
+                    fragments[nval] = wtext
+                end
+            end
+        end
+        #=
+        for wd in wds
+            # THIS IS WRONG:
+            attnames = map(att -> att.name, attributes(wds[end]))
+            if "n" in attnames
+                nval = wd["n"]
+                wtext = EditionBuilders.collectw(wd, builder)
+                println("WORD FRAG: " * nval * " with text " * wtext)
+                if nval in keys(fragments)
+                    println("MODIFY")
+                    fragments[nval] = fragments[nval] * "-" * wtext
+                else
+                    
+                    println("ADD " * wtext)
+                    fragments[nval] = wtext
+                end
+            else
+                #println("Wrapper only")
+            end
+        end
+        =#
+    end
+    fragments
+end
 
-function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.corpus)
-    
-    psgids =  map(cn -> passagecomponent(cn.urn), nodes)
-    wstokens = map(cn -> split(cn.text," "), nodes)
 
+"Compose edited text of a given XML element using a given builder."
+function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum)
+    nowseen = seen
+    println("Editing ", el.name, " with seen ", seen)
+    if ! validelname(builder, el.name)
+        str = ezxmlstring(el)
+        msg = "Invalid element $(el.name) in $(str)"
+        throw(DomainError(msg))
+    end
 
-    # Build up a dictionary of passages with trailing
-    # word fragments.
-    frag = r"^\+\+(.+)\+\+$"
-    trailers = []
-    for i in 1:length(psgids)
-        tkns = wstokens[i]
-        if occursin(frag, tkns[end])
-            tobecontinued = match(frag, tkns[end]).captures[1] * "+"
-            push!(trailers, (psgids[i], tobecontinued))
+    reply = []
+    if el.name == "foreign"
+        push!(reply, "«" * el.content * "»")
+
+    elseif el.name == "choice"
+        if ! validchoice(el)
+            children = elements(el)
+            childnames = map(n -> n.name, children)
+            badlist = join(childnames, ", ")
+            msg = "Invalid children of `choice` element: $(badlist) in  $(ezxmlstring(el))"
+            throw(DomainError(msg))
+            
+        else
+            chosen = TEIchoice(builder, el)
+            push!(reply, chosen)
+        end
+
+    elseif el.name == "w"
+        #println("\n\nSEEING A W and fraglist is ", keys(fragments))
+        #println("While already seen = ", nowseen)
+        if hasattribute(el, "n")
+            nval = el["n"]
+            if nval in nowseen
+                #println("Already seen " * nval)
+                # skip
+            elseif nval in keys(fragments)
+                #println("Checking n = " * nval)
+                push!(reply, fragments[nval])
+                if nval in seen
+                    pritnln("\tAlready seen")
+                else
+                    #println("\tPushing ", nval)
+                    push!(nowseen, nval)
+                    #println("and seen is now ", nowseen )
+                end
+                
+            else
+                push!(reply, collectw(el, builder))
+            end
+        end
+        
+    elseif skipelement(builder, el.name)
+        # do nothing
+
+    else
+        #println("Getting epigraphic children.")
+        children = nodes(el)
+        if !(isempty(children))
+            for c in children
+                childres =  editedtext(builder, c, fragments, nowseen, accum)
+                push!(reply, childres)
+            end
         end
     end
-    trailerdict = Dict(trailers)
-    # Now look at passages with initial wordfragments,
-    # and update dictionary.
-    wstokens
+    (strip(join(reply," ")), nowseen)
+    
+end
 
-    # Finally, compose new corpus
-    CitableCorpus(tidied)
+
+function editednode(
+    builder::MidEpigraphicBuilder, 
+    citablenode::CitableNode, 
+    fragments::Dict, 
+    seen::Array, 
+    accum::AbstractString = "")
+    n  = root(parsexml(citablenode.text))
+    #editiontext = editedtext(builder, nd)
+    rslts = [accum]
+    if n.type == EzXML.ELEMENT_NODE 
+        elresults = editedelement(builder, n,  fragments, seen, accum)
+        push!(rslts, elresults[1])
+
+	elseif 	n.type == EzXML.TEXT_NODE
+		tidier = cleanws(n.content )
+		if !isempty(tidier)
+			push!(rslts, accum * tidier)
+		end
+                
+    elseif n.type == EzXML.COMMENT_NODE
+        # do nothing
+    else
+        throw(DomainError("Unrecognized node type for node $(n.type)"))
+	end
+
+
+    stripped = strip(join(rslts," "))
+    editiontext =replace(stripped, r"[ \t]+" => " ")
+    #println("==>Add text ", editiontext, " for urn ", passagecomponent(citablenode.urn), "\n\n")
+    (CitableNode(addversion(citablenode.urn, builder.versionid), editiontext),
+    seen
+    )
+end
+
+
+"""Walk parsed XML tree and compose a specific edition.
+`builder` is the edition builder to use. `n` is a parsed Node. 
+`accum` is the accumulation of any text already seen and collected.
+"""
+function editedtext(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, seen = [], accum = "")::AbstractString
+	rslts = [accum]
+    if n.type == EzXML.ELEMENT_NODE 
+        elresults = editedelement(builder, n, fragments, seen, accum)
+        push!(rslts, elresults[1])
+
+	elseif 	n.type == EzXML.TEXT_NODE
+		tidier = cleanws(n.content)
+		if !isempty(tidier)
+			push!(rslts, accum * tidier)
+		end
+                
+    elseif n.type == EzXML.COMMENT_NODE
+        # do nothing
+    else
+        throw(DomainError("Unrecognized node type for node $(n.type)"))
+	end
+    stripped = strip(join(rslts," "))
+    replace(stripped, r"[ \t]+" => " ")
+end
+
+
+function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
+    # First, build a dictionary of word fragments
+    fragments = fragmentsDictionary(builder, c)
+    usedfragments = []
+    nodes = []
+    for cn in c.corpus
+        editedpair = editednode(builder, cn, fragments, usedfragments, "")
+        push!(nodes, editedpair[1])
+        push!(usedfragments, editedpair[2])
+    end
+    #nodes = map(cn -> editednode(builder, cn), c.corpus)
+    #nd  = root(parsexml(citablenode.text))
+    #editiontext = editedtext(builder, nd, fragments)
+    # CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    CitableCorpus(nodes)
 end
 

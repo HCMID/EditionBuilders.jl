@@ -44,6 +44,19 @@ function validchoice(n::EzXML.Node)
     end
 end
 
+"Collect text of w element"
+function collectw(el, bldr)
+     # collect and squeeze:
+     children = nodes(el)
+     wordparts = []
+     for c in children
+         childres = editedtext(bldr, c, "")
+         push!(wordparts, childres)
+     end
+     # single token padded by ws:
+     singletoken = replace(join(wordparts,""), r"[ ]+" => "")
+end
+
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidBasicBuilder, el, accum)
     if ! validelname(builder, el.name)
@@ -70,25 +83,17 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         end
 
     elseif el.name == "w"
-
-        
-        # collect and squeeze:
-        children = nodes(el)
-        wordparts = []
-        for c in children
-            childres = editedtext(builder, c, "")
-            push!(wordparts, childres)
-        end
-        # single token padded by ws:
-        singletoken = replace(join(wordparts,""), r"[ ]+" => "")
+        push!(reply, collectw(el, builder))
+       
         # check for word-fragment convention:
         # `w` with `@n` attribute:
         # mark for subsequent peek-ahead
-        if hasattribute(el, "n")
-            push!(reply, " ++$(singletoken)++ ")
-        else
-            push!(reply, " $(singletoken) ")
-        end
+        #if hasattribute(el, "n")
+        #    push!(reply, " ++$(singletoken)++ ")
+        #else
+        #    push!(reply, " $(singletoken) ")
+        #end
+       
         
         
     elseif skipelement(builder, el.name)
