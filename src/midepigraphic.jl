@@ -93,6 +93,7 @@ end
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum)
     nowseen = seen
+    println("Editing ", el.name, " with seen ", seen)
     if ! validelname(builder, el.name)
         str = ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
@@ -117,20 +118,22 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
         end
 
     elseif el.name == "w"
-        println("SEEING A W and fraglist is ", keys(fragments))
+        #println("\n\nSEEING A W and fraglist is ", keys(fragments))
+        #println("While already seen = ", nowseen)
         if hasattribute(el, "n")
             nval = el["n"]
-            if nval in seen
+            if nval in nowseen
+                #println("Already seen " * nval)
                 # skip
             elseif nval in keys(fragments)
-                println("Checking n = " * nval)
+                #println("Checking n = " * nval)
                 push!(reply, fragments[nval])
                 if nval in seen
                     pritnln("\tAlready seen")
                 else
-                    println("\tPushing ", nval)
+                    #println("\tPushing ", nval)
                     push!(nowseen, nval)
-                    println("and seen is now ", seen )
+                    #println("and seen is now ", nowseen )
                 end
                 
             else
@@ -146,7 +149,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
         children = nodes(el)
         if !(isempty(children))
             for c in children
-                childres =  editedtext(builder, c, fragments, seen, accum)
+                childres =  editedtext(builder, c, fragments, nowseen, accum)
                 push!(reply, childres)
             end
         end
@@ -184,7 +187,7 @@ function editednode(
 
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
-
+    #println("==>Add text ", editiontext, " for urn ", passagecomponent(citablenode.urn), "\n\n")
     (CitableNode(addversion(citablenode.urn, builder.versionid), editiontext),
     seen
     )
@@ -231,5 +234,6 @@ function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
     #nd  = root(parsexml(citablenode.text))
     #editiontext = editedtext(builder, nd, fragments)
     # CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    CitableCorpus(nodes)
 end
 

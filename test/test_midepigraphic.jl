@@ -83,7 +83,7 @@ end
         """<ab n="4"><w n="3">de</w> : epNnEni</ab>""")
     cn5 = CitableNode(
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
-        """<ab n="5">ehbi : <persName><w n="5"></w>hMprA</persName></ab>""")
+        """<ab n="5">ehbi : <persName><w n="5">hMprA</w></persName></ab>""")
     cn6 = CitableNode(
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
         """<ab n="6"><w n="5">ma</w> : sey=atli</ab>""")
