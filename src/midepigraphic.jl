@@ -73,6 +73,7 @@ end
 "Compose edited text of a given XML element using a given builder."
 function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum)
     println("Editing element " * el.name)
+    
     if ! validelname(builder, el.name)
         str = ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
@@ -98,18 +99,18 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
 
     elseif el.name == "w"
         println("SEEING A W")
-        push!(reply, collectw(el, builder))
-       
-        # check for word-fragment convention:
-        # `w` with `@n` attribute:
-        # mark for subsequent peek-ahead
-        #if hasattribute(el, "n")
-        #    push!(reply, " ++$(singletoken)++ ")
-        #else
-        #    push!(reply, " $(singletoken) ")
-        #end
-       
-        
+        if hasattribute(el, "n")
+            nval = el["n"]
+            if nval in seen
+                # skip
+            elseif nval in keys(fragments)
+                println("Checking n = " * nval)
+                push!(reply, fragments[nval])
+                push!(seen, nval)
+            else
+                push!(reply, collectw(el, builder))
+            end
+        end
         
     elseif skipelement(builder, el.name)
         # do nothing
@@ -124,11 +125,17 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
             end
         end
     end
-    strip(join(reply," "))
+    (strip(join(reply," ")), seen)
+    
 end
 
 
-function editednode(builder::MidEpigraphicBuilder, citablenode::CitableNode, fragments, seen = [], accum = "")
+function editednode(
+    builder::MidEpigraphicBuilder, 
+    citablenode::CitableNode, 
+    fragments::Dict, 
+    seen::Array, 
+    accum::AbstractString = "")
     n  = root(parsexml(citablenode.text))
     #editiontext = editedtext(builder, nd)
     rslts = [accum]
@@ -140,7 +147,7 @@ function editednode(builder::MidEpigraphicBuilder, citablenode::CitableNode, fra
             println("Not a w: " * n.name)
         end
         elresults = editedelement(builder, n,  fragments, seen, accum)
-        push!(rslts, elresults)
+        push!(rslts, elresults[1])
 
 	elseif 	n.type == EzXML.TEXT_NODE
 		tidier = cleanws(n.content )
@@ -153,6 +160,8 @@ function editednode(builder::MidEpigraphicBuilder, citablenode::CitableNode, fra
     else
         throw(DomainError("Unrecognized node type for node $(n.type)"))
 	end
+
+
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
 
@@ -168,10 +177,10 @@ function editedtext(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, see
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedelement(builder, n, fragments, seen, accum)
-        push!(rslts, elresults)
+        push!(rslts, elresults[1])
 
 	elseif 	n.type == EzXML.TEXT_NODE
-		tidier = cleanws(n.content )
+		tidier = cleanws(n.content)
 		if !isempty(tidier)
 			push!(rslts, accum * tidier)
 		end
