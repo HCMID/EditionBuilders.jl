@@ -1,3 +1,4 @@
+![build](https://github.com/HCMID/EditionBuilders.jl/actions/workflows/Documentation.yml/badge.svg)
 
 # EditionBuilders.jl
 
