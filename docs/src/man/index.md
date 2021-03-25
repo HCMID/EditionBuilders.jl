@@ -1,18 +1,20 @@
 # API documentation
 
 
-```@contents
+
+
+## Functions
+```@docs
+editednode(builder::LiteralTextBuilder, citablenode::CitableNode)
 ```
+
 ## Types
 ```@docs
 EditionBuilder
 LiteralTextBuilder
 ```
 
-## Functions
-```@docs
-editednode(builder::LiteralTextBuilder, citablenode::CitableNode)
-```
+
 ## Index
 ```@index
 ```
