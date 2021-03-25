@@ -1,4 +1,5 @@
-# EditionBuilders.jl Documentation
+# EditionBuilders.jl
+
 ```@meta
 CurrentModule = EditionBuilders
 ```
