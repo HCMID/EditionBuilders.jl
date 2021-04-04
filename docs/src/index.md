@@ -4,4 +4,4 @@
 CurrentModule = EditionBuilders
 ```
 
-Build univocal editions from multivalent source documents.
+*Build univocal editions from multivalent source documents.*
