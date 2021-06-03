@@ -46,8 +46,8 @@ function tidyFrag(cn::CitableNode)
 end
 =#
 
-function edition(builder::MidDiplomaticBuilder, c::CitableCorpus)
+function edition(builder::MidDiplomaticBuilder, c::CitableTextCorpus)
     nodes = map(cn -> editednode(builder, cn), c.corpus)
     #tidied = map(cn -> tidyFrag(cn),nodes)
-    CitableCorpus(nodes)
+    CitableTextCorpus(nodes)
 end

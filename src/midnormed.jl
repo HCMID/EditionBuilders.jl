@@ -40,37 +40,11 @@ function skipelement(builder::MidNormalizedBuilder,elname)
     elname in ["del", "ref"]
 end
 
-function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
+function edition(builder::MidNormalizedBuilder, c::CitableTextCorpus)
     nodes = map(cn -> editednode(builder, cn), c.corpus)
     #tidied = map(cn -> tidyFrag(cn),nodes)
-    CitableCorpus(nodes)
+    CitableTextCorpus(nodes)
 end
 
-#=
-function edition(builder::MidNormalizedBuilder, c::CitableCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.corpus)
-    
-    psgids =  map(cn -> passagecomponent(cn.urn), nodes)
-    wstokens = map(cn -> split(cn.text," "), nodes)
 
-
-    # Build up a dictionary of passages with trailing
-    # word fragments.
-    frag = r"^\+\+(.+)\+\+$"
-    trailers = []
-    for i in 1:length(psgids)
-        tkns = wstokens[i]
-        if occursin(frag, tkns[end])
-            tobecontinued = match(frag, tkns[end]).captures[1] * "+"
-            push!(trailers, (psgids[i], tobecontinued))
-        end
-    end
-    trailerdict = Dict(trailers)
-    # Now look at passages with initial wordfragments,
-    # and update dictionary.
-    wstokens
-
-    # Finally, compose new corpus
-    CitableCorpus(tidied)
-end=#
 

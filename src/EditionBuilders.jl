@@ -2,7 +2,7 @@ module EditionBuilders
 
 using Documenter, DocStringExtensions
 using EzXML
-using CitableText
+using CitableText, CitableCorpus
 
 
 # Abstractions of the `EditionBuilder` trait.
@@ -28,9 +28,9 @@ include("midepigraphic.jl")
 
 
 "Edit all citable nodes using a given builder."
-function edition(builder::EditionBuilder, c::CitableCorpus)
+function edition(builder::EditionBuilder, c::CitableTextCorpus)
     nodes = map(cn -> editednode(builder, cn), c.corpus)
-    CitableCorpus(nodes)
+    CitableTextCorpus(nodes)
 end
 
 end # module
