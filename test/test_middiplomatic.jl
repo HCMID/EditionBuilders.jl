@@ -49,7 +49,7 @@ end
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
-    corpus = CitableCorpus([cn1, cn2])
+    corpus = CitableTextCorpus([cn1, cn2])
     edited = edition(bldr, corpus)
     @test length(edited.corpus)  == 2
 

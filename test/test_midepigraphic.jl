@@ -48,7 +48,7 @@ end
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
-    corpus = CitableCorpus([cn1, cn2])
+    corpus = CitableTextCorpus([cn1, cn2])
     fragg = EditionBuilders.fragmentsDictionary(bldr, corpus)
     @test fragg["1"] == "tidei-mi"
     #=
@@ -88,7 +88,7 @@ end
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
         """<ab n="6"><w n="5">ma</w> : sey=atli</ab>""")
     nodes = [cn1, cn2, cn3, cn4, cn5, cn6]
-    corpus = CitableCorpus(nodes)
+    corpus = CitableTextCorpus(nodes)
 
 end
 

@@ -41,7 +41,7 @@ function skipelement(builder::MidEpigraphicBuilder,elname)
 end
 
 "Build a dictionary of line-spanning word fragments."
-function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableCorpus)
+function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     fragments = Dict()
     # Build dictionary of fragemented words
     for n in c.corpus
@@ -206,7 +206,7 @@ function editedtext(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, see
 end
 
 
-function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
+function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     # First, build a dictionary of word fragments
     fragments = fragmentsDictionary(builder, c)
     usedfragments = []
@@ -220,6 +220,6 @@ function edition(builder::MidEpigraphicBuilder, c::CitableCorpus)
     #nd  = root(parsexml(citablenode.text))
     #editiontext = editedtext(builder, nd, fragments)
     # CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
-    CitableCorpus(nodes)
+    CitableTextCorpus(nodes)
 end
 
