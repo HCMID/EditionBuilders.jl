@@ -8,7 +8,7 @@ Pkg.instantiate()
 
 
 using Documenter, DocStringExtensions
-using CitableText
+using CitableText, CitableCorpus
 using EditionBuilders
 
 makedocs(

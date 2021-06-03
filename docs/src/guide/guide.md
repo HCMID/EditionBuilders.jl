@@ -27,6 +27,7 @@ Let's create a `CitableNode` to work from:
 
 ```jldoctest edbuild
 using CitableText
+using CitableCorpus
 urn = CtsUrn("urn:cts:trmilli:tl.106.v1:1")
 xml = """<ab n="1"><w>ebe<choice><sic>M</sic><corr>h</corr></choice>i</w> xopa : mei ti siyEni : <persName><w>sbiKaza</w></persName> Θortta : miNtehi : pddEneh : Mmi :</ab>"""
 cn = CitableNode(urn, xml)
@@ -51,17 +52,17 @@ CitableNode(CtsUrn("urn:cts:trmilli:tl.106.raw:1"), "ebeMhi xopa : mei ti siyEni
 
 ## Creating an edition
 
-The `edition` function can simply apply `editednode` to each node of a `CitableCorpus` to create a new citable corpus.
+The `edition` function can simply apply `editednode` to each node of a `CitableTextCorpus` to create a new citable corpus.
 
 Let's first make a (very short) corpus containing our previous citable node.
 
 ```jldoctest edbuild
-corpus = CitableCorpus([cn])
+corpus = CitableTextCorpus([cn])
 typeof(corpus)
 
 # output
 
-CitableCorpus
+CitableTextCorpus
 ```
 
 Here's the new, univocal edition we wanted.
@@ -72,5 +73,5 @@ univocal
 
 # output
 
-CitableCorpus(CitableNode[CitableNode(CtsUrn("urn:cts:trmilli:tl.106.raw:1"), "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")])
+CitableTextCorpus(CitableNode[CitableNode(CtsUrn("urn:cts:trmilli:tl.106.raw:1"), "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")])
 ```
