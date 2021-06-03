@@ -1,7 +1,7 @@
 name = "EditionBuilders"
 uuid = "2fb66cca-c1f8-4a32-85dd-1a01a9e8cd8f"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
-version = "0.3.3"
+version = "0.4.0"
 
 [deps]
 CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
