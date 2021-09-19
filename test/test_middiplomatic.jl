@@ -41,25 +41,25 @@ end
 #=
 @testset "Test rendering of word fragments" begin
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl") 
-    cn1 = CitableNode(
+    cn1 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
         """<ab n="1"><w n="1">tidei</w></ab>"""
     )
-    cn2 = CitableNode(
+    cn2 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
     corpus = CitableTextCorpus([cn1, cn2])
     edited = edition(bldr, corpus)
-    @test length(edited.corpus)  == 2
+    @test length(edited.passages)  == 2
 
-    dipl1 =  CitableNode(
+    dipl1 =  CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.dipl:1"),
         """tidei"""
     )
-    @test edited.corpus[1] == dipl1
+    @test edited.passages[1] == dipl1
 
-    dipl2 =  CitableNode(
+    dipl2 =  CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.dipl:2"),
         """mi : hrppi"""
     )

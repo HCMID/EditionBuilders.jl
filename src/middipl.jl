@@ -40,14 +40,14 @@ function skipelement(builder::MidDiplomaticBuilder,elname)
 end
 
 #=
-function tidyFrag(cn::CitableNode)
+function tidyFrag(cn::CitablePassage)
     newtext = replace(cn.text, "++" => "")
-    CitableNode(cn.urn, newtext)
+    CitablePassage(cn.urn, newtext)
 end
 =#
 
 function edition(builder::MidDiplomaticBuilder, c::CitableTextCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.corpus)
+    nodes = map(cn -> editednode(builder, cn), c.passages)
     #tidied = map(cn -> tidyFrag(cn),nodes)
     CitableTextCorpus(nodes)
 end

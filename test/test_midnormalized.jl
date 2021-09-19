@@ -29,11 +29,11 @@ end
 
 @testset "Test rendering of word fragments" begin
 bldr = MidNormalizedBuilder("Normalized edition", "normed")
-    cn1 = CitableNode(
+    cn1 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
         """<ab n="1"><w n="1">tidei</w></ab>"""
     )
-    cn2 = CitableNode(
+    cn2 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
