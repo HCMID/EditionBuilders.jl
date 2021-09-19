@@ -137,10 +137,10 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::Abstra
 end
 
 "Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
-function editednode(builder::MidBasicBuilder, citablenode::CitableNode)
-    nd  = root(parsexml(citablenode.text))
+function editednode(builder::MidBasicBuilder, passage::CitablePassage)
+    nd  = root(parsexml(passage.text))
     editiontext = editedtext(builder, nd)
-    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    CitablePassage(addversion(passage.urn, builder.versionid), editiontext)
 end
 
 

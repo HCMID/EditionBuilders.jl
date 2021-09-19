@@ -40,11 +40,11 @@ end
 
 @testset "Test building dictionary of word fragments" begin
     bldr = MidEpigraphicBuilder("Edition of epigraphic text", "epig") 
-    cn1 = CitableNode(
+    cn1 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
         """<ab n="1"><w n="1">tidei</w></ab>"""
     )
-    cn2 = CitableNode(
+    cn2 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
@@ -53,15 +53,15 @@ end
     @test fragg["1"] == "tidei-mi"
     #=
     edited = edition(bldr, corpus)
-    @test length(edited.corpus)  == 2
+    @test length(edited.passages)  == 2
 
-    dipl1 =  CitableNode(
+    dipl1 =  CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.dipl:1"),
         """tidei"""
     )
-    @test edited.corpus[1] == dipl1
+    @test edited.passages[1] == dipl1
 
-    dipl2 =  CitableNode(
+    dipl2 =  CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.dipl:2"),
         """mi : hrppi"""
     )
@@ -69,22 +69,22 @@ end
 end
 
 @testset "Test multiline line crossing text" begin 
-    cn1 = CitableNode(
+    cn1 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
         """<ab n="1">ebENnE : <w n="1">xo</w></ab>""")
-    cn2 = CitableNode(
+    cn2 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="2"><w n="1">pA</w> : <w>m<unclear>E</unclear>=ne</w> <w n="2">pr</w></ab>""")
-    cn3 = CitableNode(
+    cn3 = CitablePassage(
             CtsUrn("urn:cts:lycian:tl.t3.test:3"),
             """ <ab n="3"><w n="2">NnawatE</w> : <w n="3">me</w></ab>""")
-    cn4 = CitableNode(
+    cn4 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:4"),
         """<ab n="4"><w n="3">de</w> : epNnEni</ab>""")
-    cn5 = CitableNode(
+    cn5 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
         """<ab n="5">ehbi : <persName><w n="5">hMprA</w></persName></ab>""")
-    cn6 = CitableNode(
+    cn6 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
         """<ab n="6"><w n="5">ma</w> : sey=atli</ab>""")
     nodes = [cn1, cn2, cn3, cn4, cn5, cn6]

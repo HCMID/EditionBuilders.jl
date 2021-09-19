@@ -9,15 +9,15 @@ end
 
 
 "Generic edition builder mindlessly extracting all text content from XML node."
-function editednode(builder::LiteralTextBuilder, citablenode::CitableNode)
-    doc = parsexml(citablenode.text)
+function editednode(builder::LiteralTextBuilder, passage::CitablePassage)
+    doc = parsexml(passage.text)
     txt = root(doc).content
-    CitableNode(addversion(citablenode.urn, builder.versionid), txt)
+    CitablePassage(addversion(passage.urn, builder.versionid), txt)
 end
 
 
-"Generic validator accepting any XML element in the text of `citablenode`."
-function usageerrors(builder::LiteralTextBuilder, citablenode::CitableNode)
+"Generic validator accepting any XML element in the text of `CitablePassage`."
+function usageerrors(builder::LiteralTextBuilder, passage::CitablePassage)
     []
 end
 

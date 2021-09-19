@@ -29,7 +29,7 @@ include("midepigraphic.jl")
 
 "Edit all citable nodes using a given builder."
 function edition(builder::EditionBuilder, c::CitableTextCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.corpus)
+    nodes = map(cn -> editednode(builder, cn), c.passages)
     CitableTextCorpus(nodes)
 end
 

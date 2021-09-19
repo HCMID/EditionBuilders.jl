@@ -44,7 +44,7 @@ end
 function fragmentsDictionary(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     fragments = Dict()
     # Build dictionary of fragemented words
-    for n in c.corpus
+    for n in c.passages
         nroot = parsexml(n.text).root
         wds = findall("//w", nroot)
         #println(string("FOUND words " , length(wds)))
@@ -147,11 +147,11 @@ end
 
 function editednode(
     builder::MidEpigraphicBuilder, 
-    citablenode::CitableNode, 
+    CitablePassage::CitablePassage, 
     fragments::Dict, 
     seen::Array, 
     accum::AbstractString = "")
-    n  = root(parsexml(citablenode.text))
+    n  = root(parsexml(CitablePassage.text))
     #editiontext = editedtext(builder, nd)
     rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
@@ -173,8 +173,8 @@ function editednode(
 
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
-    #println("==>Add text ", editiontext, " for urn ", passagecomponent(citablenode.urn), "\n\n")
-    (CitableNode(addversion(citablenode.urn, builder.versionid), editiontext),
+    #println("==>Add text ", editiontext, " for urn ", passagecomponent(CitablePassage.urn), "\n\n")
+    (CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext),
     seen
     )
 end
@@ -211,15 +211,15 @@ function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     fragments = fragmentsDictionary(builder, c)
     usedfragments = []
     nodes = []
-    for cn in c.corpus
+    for cn in c.passages
         editedpair = editednode(builder, cn, fragments, usedfragments, "")
         push!(nodes, editedpair[1])
         push!(usedfragments, editedpair[2])
     end
-    #nodes = map(cn -> editednode(builder, cn), c.corpus)
-    #nd  = root(parsexml(citablenode.text))
+    #nodes = map(cn -> editednode(builder, cn), c.passages)
+    #nd  = root(parsexml(CitablePassage.text))
     #editiontext = editedtext(builder, nd, fragments)
-    # CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    # CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)
     CitableTextCorpus(nodes)
 end
 

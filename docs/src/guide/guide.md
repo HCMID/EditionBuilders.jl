@@ -23,22 +23,22 @@ Subtypes of `EditionBuilder` should implement tjhe exported function `editednode
 
 
 
-Let's create a `CitableNode` to work from:
+Let's create a `CitablePassage` to work from:
 
 ```jldoctest edbuild
 using CitableText
 using CitableCorpus
 urn = CtsUrn("urn:cts:trmilli:tl.106.v1:1")
 xml = """<ab n="1"><w>ebe<choice><sic>M</sic><corr>h</corr></choice>i</w> xopa : mei ti siyEni : <persName><w>sbiKaza</w></persName> Θortta : miNtehi : pddEneh : Mmi :</ab>"""
-cn = CitableNode(urn, xml)
+cn = CitablePassage(urn, xml)
 cn.urn
 
 # output
 
-CtsUrn("urn:cts:trmilli:tl.106.v1:1")
+urn:cts:trmilli:tl.106.v1:1
 ```
 
-We use `editednode` to apply our builder to a single `CitableNode`. This creates a new `CitableNode`.  The URN of the new node is the same except that the version identifier is now the one we specified for our builder.  The text content is the literal text that our builder extracted from the XML source.
+We use `editednode` to apply our builder to a single `CitablePassage`. This creates a new `CitablePassage`.  The URN of the new node is the same except that the version identifier is now the one we specified for our builder.  The text content is the literal text that our builder extracted from the XML source.
 
 ```jldoctest edbuild
 edited = editednode(builder, cn)
@@ -46,7 +46,7 @@ edited
 
 # output
 
-CitableNode(CtsUrn("urn:cts:trmilli:tl.106.raw:1"), "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")
+CitablePassage(urn:cts:trmilli:tl.106.raw:1, "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")
 ```
 
 
@@ -73,5 +73,5 @@ univocal
 
 # output
 
-CitableTextCorpus(CitableNode[CitableNode(CtsUrn("urn:cts:trmilli:tl.106.raw:1"), "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")])
+CitableTextCorpus(CitablePassage[CitablePassage(urn:cts:trmilli:tl.106.raw:1, "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")])
 ```
