@@ -1,7 +1,7 @@
 name = "EditionBuilders"
 uuid = "2fb66cca-c1f8-4a32-85dd-1a01a9e8cd8f"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
@@ -12,7 +12,7 @@ EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-CitableCorpus = "0.5"
+CitableCorpus = "0.6"
 CitableText = "0.11"
 DocStringExtensions = "0.8"
 Documenter = "0.27"
