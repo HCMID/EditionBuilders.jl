@@ -16,9 +16,9 @@ LiteralTextBuilder("Literal text builder", "raw")
 ```
 
 
-## Exported function: `editednode`
+## Exported function: `edited_passage`
 
-Subtypes of `EditionBuilder` should implement tjhe exported function `editednode`.
+Subtypes of `EditionBuilder` should implement tjhe exported function `edited_passage`.
 
 
 
@@ -38,10 +38,10 @@ cn.urn
 urn:cts:trmilli:tl.106.v1:1
 ```
 
-We use `editednode` to apply our builder to a single `CitablePassage`. This creates a new `CitablePassage`.  The URN of the new node is the same except that the version identifier is now the one we specified for our builder.  The text content is the literal text that our builder extracted from the XML source.
+We use `edited_passage` to apply our builder to a single `CitablePassage`. This creates a new `CitablePassage`.  The URN of the new passage is the same except that the version identifier is now the one we specified for our builder.  The text content is the literal text that our builder extracted from the XML source.
 
 ```jldoctest edbuild
-edited = editednode(builder, cn)
+edited = edited_passage(builder, cn)
 edited
 
 # output
@@ -52,9 +52,9 @@ CitablePassage(urn:cts:trmilli:tl.106.raw:1, "ebeMhi xopa : mei ti siyEni : sbiK
 
 ## Creating an edition
 
-The `edition` function can simply apply `editednode` to each node of a `CitableTextCorpus` to create a new citable corpus.
+The `edition` function can simply apply `edited_passage` to each passage of a `CitableTextCorpus` to create a new citable corpus.
 
-Let's first make a (very short) corpus containing our previous citable node.
+Let's first make a (very short) corpus containing our previous citable passage.
 
 ```jldoctest edbuild
 corpus = CitableTextCorpus([cn])

@@ -36,7 +36,7 @@ end
     n = root(doc)
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
     errmsg = "Invalid children of `choice` element: add, del in  <choice><add>Doctor</add><del>Dr.</del></choice>"
-    @test_throws  DomainError(errmsg) editedtext(bldr, n) 
+    @test_throws  DomainError(errmsg) edited_text(bldr, n) 
 end
 
 
@@ -46,7 +46,7 @@ end
     doc = parsexml("<p>Word 1 <!-- there are two --> word 2</p>")
     n = root(doc)
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-    @test editedtext(bldr, n) == "Word 1 word 2"
+    @test edited_text(bldr, n) == "Word 1 word 2"
 
 end
 
@@ -58,7 +58,7 @@ end
     """
     n = parsexml(xml).root
     bldr = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-    @test editedtext(bldr, n) == "πέφραδέ τε τρώεσσι καὶ εὐχόμενος ἔπος ηύδα"
+    @test edited_text(bldr, n) == "πέφραδέ τε τρώεσσι καὶ εὐχόμενος ἔπος ηύδα"
 end
 
 @testset "Test for presence of attribute" begin
@@ -72,12 +72,12 @@ end
     xml = """<w n="2">frag</w>"""
     n = parsexml(xml).root
     bldr = MidNormalizedBuilder("Normalized edition", "norm")
-    @test_broken editedtext(bldr, n) == "++frag++"
+    @test_broken edited_text(bldr, n) == "++frag++"
 end
 
 @testset "Apply convention for foreign" begin
     xml = """<foreign lang="lyc">tideimi</foreign>"""
     n = parsexml(xml).root
     bldr = MidNormalizedBuilder("Normalized edition", "norm")
-    @test editedtext(bldr, n) == "«tideimi»"
+    @test edited_text(bldr, n) == "«tideimi»"
 end

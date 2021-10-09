@@ -15,16 +15,16 @@ function TEIchoice(builder::MidNormalizedBuilder, n)
     childnames = map(n -> n.name, children)
     if "abbr" in childnames
         abbrlist = filter(n -> n.name == "expan", children)
-        editedtext(builder, abbrlist[1])
+        edited_text(builder, abbrlist[1])
 
     elseif "orig" in childnames
         origlist = filter(n -> n.name == "reg", children)
-        editedtext(builder, origlist[1])
+        edited_text(builder, origlist[1])
 
 
     elseif "sic" in childnames
         siclist = filter(n -> n.name == "corr", children)
-        editedtext(builder, siclist[1])
+        edited_text(builder, siclist[1])
 
 
     else
@@ -41,9 +41,9 @@ function skipelement(builder::MidNormalizedBuilder,elname)
 end
 
 function edition(builder::MidNormalizedBuilder, c::CitableTextCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.passages)
-    #tidied = map(cn -> tidyFrag(cn),nodes)
-    CitableTextCorpus(nodes)
+    passages = map(cn -> edited_passage(builder, cn), c.passages)
+    #tidied = map(cn -> tidyFrag(cn),passages)
+    CitableTextCorpus(passages)
 end
 
 

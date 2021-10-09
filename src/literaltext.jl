@@ -8,8 +8,8 @@ struct LiteralTextBuilder <: EditionBuilder
 end
 
 
-"Generic edition builder mindlessly extracting all text content from XML node."
-function editednode(builder::LiteralTextBuilder, passage::CitablePassage)
+"Generic edition builder mindlessly extracting all text content from XML passage."
+function edited_passage(builder::LiteralTextBuilder, passage::CitablePassage)
     doc = parsexml(passage.text)
     txt = root(doc).content
     CitablePassage(addversion(passage.urn, builder.versionid), txt)
@@ -33,14 +33,14 @@ function validElementNames(builder::EditionBuilder)
     []
 end
 
-"Compose text content from an XML node using a LiteralTextBuilder."
-function editedtext(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
+"Compose text content from an XML passage using a LiteralTextBuilder."
+function edited_text(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
 	if n.type == EzXML.ELEMENT_NODE 
 		children = nodes(n)
 		if !(isempty(children))
 			for c in children
-				childres =  editedtext(builder, c, accum)
+				childres =  edited_text(builder, c, accum)
 			 	push!(rslts, childres)
 			end
 		end
