@@ -46,7 +46,7 @@ edited
 
 # output
 
-CitablePassage(urn:cts:trmilli:tl.106.raw:1, "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")
+<urn:cts:trmilli:tl.106.raw:1> ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :
 ```
 
 
@@ -73,5 +73,5 @@ univocal
 
 # output
 
-CitableTextCorpus(CitablePassage[CitablePassage(urn:cts:trmilli:tl.106.raw:1, "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :")])
+Corpus with 1 citable passages in 1 documents.
 ```
