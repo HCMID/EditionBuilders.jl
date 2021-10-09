@@ -50,7 +50,7 @@ function collectw(el, bldr)
      children = nodes(el)
      wordparts = []
      for c in children
-         childres = editedtext(bldr, c, "")
+         childres = edited_text(bldr, c, "")
          push!(wordparts, childres)
      end
      # single token padded by ws:
@@ -103,7 +103,7 @@ function editedelement(builder::MidBasicBuilder, el, accum)
         children = nodes(el)
         if !(isempty(children))
             for c in children
-                childres =  editedtext(builder, c, accum)
+                childres =  edited_text(builder, c, accum)
                 push!(reply, childres)
             end
         end
@@ -112,10 +112,10 @@ function editedelement(builder::MidBasicBuilder, el, accum)
 end
 
 """Walk parsed XML tree and compose a specific edition.
-`builder` is the edition builder to use. `n` is a parsed Node. 
+`builder` is the edition builder to use. `n` is a parsed passage. 
 `accum` is the accumulation of any text already seen and collected.
 """
-function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::AbstractString
+function edited_text(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::AbstractString
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedelement(builder, n, accum)
@@ -130,16 +130,16 @@ function editedtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::Abstra
     elseif n.type == EzXML.COMMENT_NODE
         # do nothing
     else
-        throw(DomainError("Unrecognized node type for node $(n.type)"))
+        throw(DomainError("Unrecognized passage type for passage $(n.type)"))
 	end
     stripped = strip(join(rslts," "))
     replace(stripped, r"[ \t]+" => " ")
 end
 
-"Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
-function editednode(builder::MidBasicBuilder, passage::CitablePassage)
+"Builder for constructing a citable passage for a diplomatic text from a citable passage in archival XML."
+function edited_passage(builder::MidBasicBuilder, passage::CitablePassage)
     nd  = root(parsexml(passage.text))
-    editiontext = editedtext(builder, nd)
+    editiontext = edited_text(builder, nd)
     CitablePassage(addversion(passage.urn, builder.versionid), editiontext)
 end
 

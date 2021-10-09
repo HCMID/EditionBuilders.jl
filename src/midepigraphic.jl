@@ -15,16 +15,16 @@ function TEIchoice(builder::MidEpigraphicBuilder, n)
     childnames = map(n -> n.name, children)
     if "abbr" in childnames
         abbrlist = filter(n -> n.name == "expan", children)
-        editedtext(builder, abbrlist[1])
+        edited_text(builder, abbrlist[1])
 
     elseif "orig" in childnames
         origlist = filter(n -> n.name == "reg", children)
-        editedtext(builder, origlist[1])
+        edited_text(builder, origlist[1])
 
 
     elseif "sic" in childnames
         siclist = filter(n -> n.name == "corr", children)
-        editedtext(builder, siclist[1])
+        edited_text(builder, siclist[1])
 
 
     else
@@ -135,7 +135,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
         children = nodes(el)
         if !(isempty(children))
             for c in children
-                childres =  editedtext(builder, c, fragments, nowseen, accum)
+                childres =  edited_text(builder, c, fragments, nowseen, accum)
                 push!(reply, childres)
             end
         end
@@ -145,14 +145,14 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
 end
 
 
-function editednode(
+function edited_passage(
     builder::MidEpigraphicBuilder, 
     CitablePassage::CitablePassage, 
     fragments::Dict, 
     seen::Array, 
     accum::AbstractString = "")
     n  = root(parsexml(CitablePassage.text))
-    #editiontext = editedtext(builder, nd)
+    #editiontext = edited_text(builder, nd)
     rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedelement(builder, n,  fragments, seen, accum)
@@ -167,7 +167,7 @@ function editednode(
     elseif n.type == EzXML.COMMENT_NODE
         # do nothing
     else
-        throw(DomainError("Unrecognized node type for node $(n.type)"))
+        throw(DomainError("Unrecognized passage type for passage $(n.type)"))
 	end
 
 
@@ -181,10 +181,10 @@ end
 
 
 """Walk parsed XML tree and compose a specific edition.
-`builder` is the edition builder to use. `n` is a parsed Node. 
+`builder` is the edition builder to use. `n` is a parsed passage. 
 `accum` is the accumulation of any text already seen and collected.
 """
-function editedtext(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, seen = [], accum = "")::AbstractString
+function edited_text(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, seen = [], accum = "")::AbstractString
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedelement(builder, n, fragments, seen, accum)
@@ -199,7 +199,7 @@ function editedtext(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, see
     elseif n.type == EzXML.COMMENT_NODE
         # do nothing
     else
-        throw(DomainError("Unrecognized node type for node $(n.type)"))
+        throw(DomainError("Unrecognized passage type for passage $(n.type)"))
 	end
     stripped = strip(join(rslts," "))
     replace(stripped, r"[ \t]+" => " ")
@@ -210,16 +210,16 @@ function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     # First, build a dictionary of word fragments
     fragments = fragmentsDictionary(builder, c)
     usedfragments = []
-    nodes = []
+    passages = []
     for cn in c.passages
-        editedpair = editednode(builder, cn, fragments, usedfragments, "")
-        push!(nodes, editedpair[1])
+        editedpair = edited_passage(builder, cn, fragments, usedfragments, "")
+        push!(passages, editedpair[1])
         push!(usedfragments, editedpair[2])
     end
-    #nodes = map(cn -> editednode(builder, cn), c.passages)
+    #passages = map(cn -> edited_passage(builder, cn), c.passages)
     #nd  = root(parsexml(CitablePassage.text))
-    #editiontext = editedtext(builder, nd, fragments)
+    #editiontext = edited_text(builder, nd, fragments)
     # CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)
-    CitableTextCorpus(nodes)
+    CitableTextCorpus(passages)
 end
 

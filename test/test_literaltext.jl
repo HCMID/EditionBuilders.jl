@@ -12,7 +12,7 @@ end
 
     builder = LiteralTextBuilder("Literal text builder", "rawtext")
 
-    edited = editednode(builder, cn)
+    edited = edited_passage(builder, cn)
     @test isa(edited, CitablePassage)
     
     expectedtext = "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :"
@@ -23,5 +23,5 @@ end
     bldr = LiteralTextBuilder("Literal text", "raw")
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "Dr.Doctor"
+    @test edited_text(bldr, n) == "Dr.Doctor"
 end

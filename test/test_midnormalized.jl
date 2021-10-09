@@ -9,21 +9,21 @@ end
     bldr = MidNormalizedBuilder("Normalized edition", "normed")
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "Doctor"
+    @test edited_text(bldr, n) == "Doctor"
 end
 
 @testset "Test collecting diplomatic text from orig/reg choice" begin
     bldr = MidNormalizedBuilder("Normalized edition", "normed")
     doc = parsexml("<choice><orig>good</orig><reg>better</reg></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "better"
+    @test edited_text(bldr, n) == "better"
 end
 
 @testset "Test collecting diplomatic text from sic/cor choice" begin
     bldr = MidNormalizedBuilder("Normalized edition", "normed")
     doc = parsexml("<choice><sic>speling</sic><corr>spelling</corr></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "spelling"
+    @test edited_text(bldr, n) == "spelling"
 end
 
 

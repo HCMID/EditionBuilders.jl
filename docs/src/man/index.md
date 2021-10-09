@@ -5,7 +5,7 @@
 
 ## Functions
 ```@docs
-editednode(builder::LiteralTextBuilder, CitablePassage::CitablePassage)
+edited_passage(builder::LiteralTextBuilder, CitablePassage::CitablePassage)
 ```
 
 ## Types

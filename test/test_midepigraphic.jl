@@ -8,21 +8,21 @@ end
     bldr = MidEpigraphicBuilder("Edition of epigraphic text", "epig")
     doc = parsexml("<choice><abbr>Dr.</abbr><expan>Doctor</expan></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "Doctor"
+    @test edited_text(bldr, n) == "Doctor"
 end
 
 @testset "Test collecting diplomatic text from orig/reg choice" begin
     bldr = MidEpigraphicBuilder("Edition of epigraphic text", "epig")
     doc = parsexml("<choice><orig>good</orig><reg>better</reg></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "better"
+    @test edited_text(bldr, n) == "better"
 end
 
 @testset "Test collecting diplomatic text from sic/cor choice" begin
     bldr = MidEpigraphicBuilder("Edition of epigraphic text", "epig")
     doc = parsexml("<choice><sic>speling</sic><corr>spelling</corr></choice>")    
     n = root(doc)
-    @test editedtext(bldr, n) == "spelling"
+    @test edited_text(bldr, n) == "spelling"
 end
 
 @testset "Test tokenization of TEI w and supplied elements" begin
@@ -31,11 +31,11 @@ end
     doc = parsexml(raw)
     n = root(doc)
     bldr = MidEpigraphicBuilder("Edition of epigraphic text", "epig")
-    @test editedtext(bldr, n) == "A bunch of hard to read stuff."
+    @test edited_text(bldr, n) == "A bunch of hard to read stuff."
 
     raw2 = "<ab n=\"3\">tideimi : hrppi : ladi : se <w>tide<supplied>imi</supplied></w></ab>"
     n2 = root(parsexml(raw2))
-    @test editedtext(bldr, n2) == "tideimi : hrppi : ladi : se tideimi"
+    @test edited_text(bldr, n2) == "tideimi : hrppi : ladi : se tideimi"
 end
 
 @testset "Test building dictionary of word fragments" begin
@@ -87,8 +87,8 @@ end
     cn6 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:5"),
         """<ab n="6"><w n="5">ma</w> : sey=atli</ab>""")
-    nodes = [cn1, cn2, cn3, cn4, cn5, cn6]
-    corpus = CitableTextCorpus(nodes)
+    passages = [cn1, cn2, cn3, cn4, cn5, cn6]
+    corpus = CitableTextCorpus(passages)
 
 end
 

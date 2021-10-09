@@ -7,7 +7,7 @@ using CitableText, CitableCorpus
 
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
-export editedtext, editednode, edition
+export edited_text, edited_passage, edition
 export validElementNames, validelname
 
 # Implementations
@@ -27,10 +27,10 @@ include("midnormed.jl")
 include("midepigraphic.jl")
 
 
-"Edit all citable nodes using a given builder."
+"Edit all citable passages using a given builder."
 function edition(builder::EditionBuilder, c::CitableTextCorpus)
-    nodes = map(cn -> editednode(builder, cn), c.passages)
-    CitableTextCorpus(nodes)
+    passages = map(cn -> edited_passage(builder, cn), c.passages)
+    CitableTextCorpus(passages)
 end
 
 end # module
