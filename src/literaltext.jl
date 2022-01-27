@@ -21,7 +21,9 @@ function edited(
 end
 
 
-"Generic validator accepting any XML element in the text of `CitablePassage`."
+"""Generic validator accepting any XML element in the text of `CitablePassage`.
+$(SIGNATURES)
+"""
 function usageerrors(builder::LiteralTextBuilder, passage::CitablePassage)
     []
 end
@@ -40,7 +42,9 @@ function validElementNames(builder::EditionBuilder)
     []
 end
 
-"Compose text content from an XML passage using a LiteralTextBuilder."
+"""Compose text content from an XML passage using a LiteralTextBuilder.
+$(SIGNATURES)
+"""
 function edited_text(builder::LiteralTextBuilder, n::EzXML.Node, accum = "")
 	rslts = [accum]
 	if n.type == EzXML.ELEMENT_NODE 
