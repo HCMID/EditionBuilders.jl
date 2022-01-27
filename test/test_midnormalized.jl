@@ -29,16 +29,16 @@ end
 
 @testset "Test rendering of word fragments" begin
 bldr = MidNormalizedBuilder("Normalized edition", "normed")
-    cn1 = CitablePassage(
+    psg1 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:1"),
         """<ab n="1"><w n="1">tidei</w></ab>"""
     )
-    cn2 = CitablePassage(
+    psg2 = CitablePassage(
         CtsUrn("urn:cts:lycian:tl.t3.test:2"),
         """<ab n="1"><w n="1">mi</w> : hrppi</ab>"""
     )
-    corpus = CitableTextCorpus([cn1, cn2])
-    edited = edition(bldr, corpus)
-    
+    corpus = CitableTextCorpus([psg1, psg2])
+    normed = edited(bldr, corpus)
+    @test normed isa CitableTextCorpus
     #@test edited = "something"
 end

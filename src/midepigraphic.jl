@@ -145,13 +145,14 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
 end
 
 
-function edited_passage(
+function edited(
     builder::MidEpigraphicBuilder, 
-    CitablePassage::CitablePassage, 
+    psg::CitablePassage, 
     fragments::Dict, 
     seen::Array, 
-    accum::AbstractString = "")
-    n  = root(parsexml(CitablePassage.text))
+    accum::AbstractString = ""; 
+    edition = nothing, exemplar = nothing)
+    n  = root(parsexml(psg.text))
     #editiontext = edited_text(builder, nd)
     rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
@@ -174,7 +175,7 @@ function edited_passage(
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
     #println("==>Add text ", editiontext, " for urn ", passagecomponent(CitablePassage.urn), "\n\n")
-    (CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext),
+    (CitablePassage(addversion(psg.urn, builder.versionid), editiontext),
     seen
     )
 end
@@ -212,11 +213,11 @@ function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     usedfragments = []
     passages = []
     for cn in c.passages
-        editedpair = edited_passage(builder, cn, fragments, usedfragments, "")
+        editedpair = edited(builder, cn, fragments, usedfragments, "")
         push!(passages, editedpair[1])
         push!(usedfragments, editedpair[2])
     end
-    #passages = map(cn -> edited_passage(builder, cn), c.passages)
+    #passages = map(cn -> edited(builder, cn), c.passages)
     #nd  = root(parsexml(CitablePassage.text))
     #editiontext = edited_text(builder, nd, fragments)
     # CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)

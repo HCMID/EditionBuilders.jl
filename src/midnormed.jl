@@ -4,6 +4,20 @@ struct MidNormalizedBuilder <: MidBasicBuilder
     versionid
 end
 
+"""Instantiate a `MidNormalizedBuilder`.
+$(SIGNATURES)
+"""
+function normalizedbuilder(; versionid = "normed")
+    MidNormalizedBuilder("MID normalized edition builder", versionid)
+end
+
+"""Return version identifier.
+$(SIGNATURES)
+"""
+function versionid(bldr::MidNormalizedBuilder)
+   bldr.versionid
+end
+
 "Make normalized choice of MID-legal TEI choice."
 function TEIchoice(builder::MidNormalizedBuilder, n)
     #= Account for:
@@ -41,7 +55,7 @@ function skipelement(builder::MidNormalizedBuilder,elname)
 end
 
 function edition(builder::MidNormalizedBuilder, c::CitableTextCorpus)
-    passages = map(cn -> edited_passage(builder, cn), c.passages)
+    passages = map(cn -> edited(builder, cn), c.passages)
     #tidied = map(cn -> tidyFrag(cn),passages)
     CitableTextCorpus(passages)
 end
