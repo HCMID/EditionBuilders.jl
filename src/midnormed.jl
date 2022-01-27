@@ -4,6 +4,14 @@ struct MidNormalizedBuilder <: MidBasicBuilder
     versionid
 end
 
+"""Instantiate a `MidNormalizedBuilder`.
+$(SIGNATURES)
+"""
+function normalizedbuilder(; versionid = "normed")
+    MidDiplomaticBuilder("MID normalized edition builder", versionid)
+end
+
+
 "Make normalized choice of MID-legal TEI choice."
 function TEIchoice(builder::MidNormalizedBuilder, n)
     #= Account for:

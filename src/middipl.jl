@@ -1,9 +1,25 @@
 
 "Builder for reading diplomatic text from TEI XML following MID conventions."
 struct MidDiplomaticBuilder <: MidBasicBuilder
-    name
-    versionid
+    name::AbstractString
+    versionid::AbstractString
 end
+
+
+"""Instantiate a `MidDiplomaticBuilder`.
+$(SIGNATURES)
+"""
+function diplomaticbuilder(; versionid = "dipl")
+    MidDiplomaticBuilder("MID diplomatic edition builder", versionid)
+end
+
+"""Define default version identifier.
+$(SIGNATURES)
+"""
+function versionid(bldr::MidDiplomaticBuilder)
+   bldr.versionid
+end
+
 
 "Make diplomatic choice of MID-legal TEI choice."
 function TEIchoice(builder::MidDiplomaticBuilder, n)

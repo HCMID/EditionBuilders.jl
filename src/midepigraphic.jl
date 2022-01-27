@@ -147,11 +147,12 @@ end
 
 function edited_passage(
     builder::MidEpigraphicBuilder, 
-    CitablePassage::CitablePassage, 
+    psg::CitablePassage, 
     fragments::Dict, 
     seen::Array, 
-    accum::AbstractString = "")
-    n  = root(parsexml(CitablePassage.text))
+    accum::AbstractString = ""; 
+    edition = nothing, exemplar = nothing)
+    n  = root(parsexml(psg.text))
     #editiontext = edited_text(builder, nd)
     rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
@@ -174,7 +175,7 @@ function edited_passage(
     stripped = strip(join(rslts," "))
     editiontext =replace(stripped, r"[ \t]+" => " ")
     #println("==>Add text ", editiontext, " for urn ", passagecomponent(CitablePassage.urn), "\n\n")
-    (CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext),
+    (CitablePassage(addversion(psg.urn, builder.versionid), editiontext),
     seen
     )
 end
