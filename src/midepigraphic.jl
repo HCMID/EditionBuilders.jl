@@ -145,7 +145,7 @@ function editedelement(builder::MidEpigraphicBuilder, el, fragments, seen, accum
 end
 
 
-function edited_passage(
+function edited(
     builder::MidEpigraphicBuilder, 
     psg::CitablePassage, 
     fragments::Dict, 
@@ -213,11 +213,11 @@ function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     usedfragments = []
     passages = []
     for cn in c.passages
-        editedpair = edited_passage(builder, cn, fragments, usedfragments, "")
+        editedpair = edited(builder, cn, fragments, usedfragments, "")
         push!(passages, editedpair[1])
         push!(usedfragments, editedpair[2])
     end
-    #passages = map(cn -> edited_passage(builder, cn), c.passages)
+    #passages = map(cn -> edited(builder, cn), c.passages)
     #nd  = root(parsexml(CitablePassage.text))
     #editiontext = edited_text(builder, nd, fragments)
     # CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)

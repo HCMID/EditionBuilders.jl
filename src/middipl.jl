@@ -13,7 +13,7 @@ function diplomaticbuilder(; versionid = "dipl")
     MidDiplomaticBuilder("MID diplomatic edition builder", versionid)
 end
 
-"""Define default version identifier.
+"""Return version identifier.
 $(SIGNATURES)
 """
 function versionid(bldr::MidDiplomaticBuilder)
@@ -21,7 +21,9 @@ function versionid(bldr::MidDiplomaticBuilder)
 end
 
 
-"Make diplomatic choice of MID-legal TEI choice."
+"""Make diplomatic choice of MID-legal TEI choice.
+$(SIGNATURES)
+"""
 function TEIchoice(builder::MidDiplomaticBuilder, n)
     #= Account for:
         abbr/expan
@@ -50,7 +52,9 @@ function TEIchoice(builder::MidDiplomaticBuilder, n)
     end
 end
 
-
+"""True if element should be omitted.
+$(SIGNATURES)
+"""
 function skipelement(builder::MidDiplomaticBuilder,elname)
     elname in ["add", "supplied", "ref"]
 end
@@ -62,8 +66,15 @@ function tidyFrag(cn::CitablePassage)
 end
 =#
 
-function edition(builder::MidDiplomaticBuilder, c::CitableTextCorpus)
-    passages = map(cn -> edited_passage(builder, cn), c.passages)
+
+"""Edit corpus `c` using `builder`.
+$(SIGNATURES)
+"""
+function edited(
+    builder::MidDiplomaticBuilder, 
+    c::CitableTextCorpus;
+    edition = nothing, exemplar = nothing)
+    passages = map(cn -> edited(builder, cn, edition = edition, exemplar = exemplar), c.passages)
     #tidied = map(cn -> tidyFrag(cn),passages)
     CitableTextCorpus(passages)
 end

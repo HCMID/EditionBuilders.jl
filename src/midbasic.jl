@@ -140,10 +140,29 @@ end
 """Builder for constructing a citable passage for a diplomatic text from a citable passage in archival XML.
 $(SIGNATURES)
 """
-function edited_passage(builder::MidBasicBuilder, passage::CitablePassage; edition = nothing, exemplar = nothing)
+function edited(
+    builder::MidBasicBuilder,
+    passage::CitablePassage; 
+    edition = nothing, exemplar = nothing)
     nd  = root(parsexml(passage.text))
     editiontext = edited_text(builder, nd)
-    CitablePassage(addversion(passage.urn, builder.versionid), editiontext)
+    psg = passage.urn
+    if length(workparts(psg)) < 3
+        throw(ArgumentError("Only nodes citable at a specific version level can be edited."))
+    end
+
+    versionedurn = nothing
+    if isnothing(exemplar)
+        newversion = isnothing(edition) ? versionid(builder) : edition  
+        versionedurn = addversion(psg, newversion)
+
+    else
+        newversion = isnothing(edition) ? versionid(builder) : edition
+        version1 =  addversion(psg, newversion) 
+        versionedurn = addexemplar(version1, exemplar)
+    end
+
+    CitablePassage(versionedurn, editiontext)
 end
 
 

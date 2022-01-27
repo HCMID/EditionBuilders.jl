@@ -7,7 +7,7 @@ using CitableText, CitableCorpus
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
 export versionid
-export edited_text, edited_passage, edition
+export edited_text, edited
 export validElementNames, validelname
 
 # Implementations

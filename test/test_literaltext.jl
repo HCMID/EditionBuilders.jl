@@ -12,7 +12,7 @@ end
 
     builder = LiteralTextBuilder("Literal text builder", "rawtext")
 
-    edited = edited_passage(builder, cn)
+    edited = edited(builder, cn)
     @test isa(edited, CitablePassage)
     
     expectedtext = "ebeMhi xopa : mei ti siyEni : sbiKaza Θortta : miNtehi : pddEneh : Mmi :"

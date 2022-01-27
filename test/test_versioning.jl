@@ -14,4 +14,10 @@
 
     dip2 = diplomaticbuilder(versionid = "diplomatic")
     @test versionid(dip2) == "diplomatic"
+
+
+    urn = CtsUrn("urn:cts:mid:testset.c:1")
+    txt = "<p n=\"1\"><choice><sic>speling</sic><corr>spelling</corr></choice></p>"
+    psg = CitablePassage(urn, txt)
+    #@test edited(, psg)
 end
