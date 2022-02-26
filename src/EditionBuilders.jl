@@ -4,6 +4,9 @@ using Documenter, DocStringExtensions
 using EzXML
 using CitableText, CitableCorpus
 
+import CitableBase: addversion
+import CitableBase: versionid
+
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
 export versionid
