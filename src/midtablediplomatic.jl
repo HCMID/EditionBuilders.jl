@@ -6,48 +6,83 @@ struct MidDiplomaticTableBuilder <: MidBasicBuilder
     diplomatizer::MidDiplomaticBuilder
 end
 
+
+
+
+"""Version identifier used by this builder.
+$(SIGNATURES)
+"""
 function versionid(bldr::MidDiplomaticTableBuilder) 
     bldr.versionid
 end
 
+
+"""Simplify constructing a `MidDiplomaticTableBuilder`.
+$(SIGNATURES)
+"""
 function diplomatictable(; versionid = "dipl")
     MidDiplomaticTableBuilder("MID diplomatic edition builder for tables", versionid, diplomaticbuilder())
 end
 
 
-"""Walk parsed XML tree and compose text content for an edition
-using `builder`. `n` is a parsed passage. 
-`accum` is the accumulation of any text already seen and collected.
+"""
 $(SIGNATURES)
 """
-function edited_text(builder::MidDiplomaticTableBuilder, n::EzXML.Node, accum = "")::AbstractString
+function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::AbstractString
+    rslts = []
+    if row.name == "row"
+        
+        cells = findall("cell", row)
+        @debug("Process row: $(length(cells)) cells")
+        
 
-    if n.name == "row"
-        @info("Process whole row")
+        for c in cells  
+            push!(rslts, "| ")
+            for n in eachnode(c)
+                if n.type == EzXML.ELEMENT_NODE 
+                    elresults = editedelement(builder.diplomatizer, n, "")
+                    push!(rslts, elresults)
+                 
+                elseif 	n.type == EzXML.TEXT_NODE
+                    tidier = cleanws(n.content )
+                    if !isempty(tidier)
+                        push!(rslts, tidier)
+                    end
+                            
+                elseif n.type == EzXML.COMMENT_NODE
+                    # do nothing
+                else
+                    throw(DomainError("Unrecognized XML node type for passage $(n.type)"))
+                end
+            end
+            
+        end
+        push!(rslts, " |")
+
+        if haskey(row, "role")
+            role = row["role"]
+            if lowercase(role) == "header"
+                @debug("FORMAT $(role)")    
+                push!(rslts, "\n")                
+                for i in 1:length(cells)
+                    push!(rslts, "| --- ")
+                end
+                push!(rslts, " |")
+            end
+            
+        end
+
+
+        join(rslts, "")
+    
+
+
+
+    else
+        @warn("I'm not prepared to parse a $(row.name)")
     end
 
-	rslts = [accum]
-
-    #=
-    if n.type == EzXML.ELEMENT_NODE 
-        elresults = editedelement(builder, n, accum)
-        push!(rslts, elresults)
-
-	elseif 	n.type == EzXML.TEXT_NODE
-		tidier = cleanws(n.content )
-		if !isempty(tidier)
-			push!(rslts, accum * tidier)
-		end
-                
-    elseif n.type == EzXML.COMMENT_NODE
-        # do nothing
-    else
-        throw(DomainError("Unrecognized passage type for passage $(n.type)"))
-	end
-    stripped = strip(join(rslts," "))
-    replace(stripped, r"[ \t]+" => " ")
-    =#
-    ""
+  
 end
 
 """Builder for constructing a citable passage for a diplomatic text from a citable passage in archival XML.
@@ -58,7 +93,13 @@ function edited(
     passage::CitablePassage; 
     edition = nothing, exemplar = nothing)
     nd  = root(parsexml(passage.text))
-    editiontext = edited_text(builder, nd)
+    @debug("xml node is a", nd.name)
+    @debug("xml text is ", passage.text)
+
+
+
+    editiontext = edited_row(builder, nd)
+    @debug("Edition text is", editiontext)
     psg = passage.urn
     if length(workparts(psg)) < 3
         throw(ArgumentError("Only nodes citable at a specific version level can be edited."))
@@ -76,4 +117,16 @@ function edited(
     end
 
     CitablePassage(versionedurn, editiontext)
+end
+
+
+
+
+function edited(
+    builder::MidDiplomaticTableBuilder, 
+    c::CitableTextCorpus;
+    edition = nothing, exemplar = nothing)
+    passages = map(cn -> edited(builder, cn, edition = edition, exemplar = exemplar), c.passages)
+    #tidied = map(cn -> tidyFrag(cn),passages)
+    CitableTextCorpus(passages)
 end
