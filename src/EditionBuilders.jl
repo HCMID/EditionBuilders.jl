@@ -19,6 +19,9 @@ export MidBasicBuilder
 export MidDiplomaticBuilder, diplomaticbuilder
 export MidNormalizedBuilder, normalizedbuilder
 export MidEpigraphicBuilder
+export MidDiplomaticTableBuilder, diplomatictable
+export MidNormalizedTableBuilder, normedtable
+
 
 export ezxmlstring
 
@@ -29,5 +32,7 @@ include("midbasic.jl")
 include("middipl.jl")
 include("midnormed.jl")
 include("midepigraphic.jl")
+include("midtablediplomatic.jl")
+include("midtablenormed.jl")
 
 end # module
