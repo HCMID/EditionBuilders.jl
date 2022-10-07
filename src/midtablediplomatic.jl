@@ -29,6 +29,7 @@ end
 $(SIGNATURES)
 """
 function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::AbstractString
+    
     rslts = []
     if row.name == "row"
         
@@ -37,10 +38,12 @@ function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::Abstra
         
 
         for c in cells  
+           
             push!(rslts, "| ")
             for n in eachnode(c)
                 if n.type == EzXML.ELEMENT_NODE 
                     elresults = editedelement(builder.diplomatizer, n, "")
+                    @debug("PUSHING ", elresults)
                     push!(rslts, elresults)
                  
                 elseif 	n.type == EzXML.TEXT_NODE
@@ -73,7 +76,7 @@ function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::Abstra
         end
 
 
-        join(rslts, "")
+        join(rslts, " ")
     
 
 

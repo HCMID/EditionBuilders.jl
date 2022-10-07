@@ -72,7 +72,7 @@ function edited_row(builder::MidNormalizedTableBuilder, row::EzXML.Node)::Abstra
         end
 
 
-        join(rslts, "")
+        join(rslts, " ")
     
 
 
