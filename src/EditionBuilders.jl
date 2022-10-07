@@ -25,6 +25,7 @@ export MidNormalizedTableBuilder, normedtable
 
 export ezxmlstring
 
+
 include("basetype.jl")
 include("utils.jl")
 include("literaltext.jl")
