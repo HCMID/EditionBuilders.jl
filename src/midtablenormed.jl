@@ -27,13 +27,23 @@ end
 """
 $(SIGNATURES)
 """
-function edited_row(builder::MidNormalizedTableBuilder, row::EzXML.Node)::AbstractString
+function edited_row(builder::MidNormalizedTableBuilder, row::EzXML.Node, tablify = false)::AbstractString
     rslts = []
+    
     if row.name == "row"
         
         cells = findall("cell", row)
         @debug("Process row: $(length(cells)) cells")
-        
+        if tablify
+            for i in 1:length(cells)
+                push!(rslts, "| ")
+            end
+            push!(rslts, " |\n")
+            for i in 1:length(cells)
+                push!(rslts, "| --- ")
+            end
+            push!(rslts, " |\n")
+        end
 
         for c in cells  
             push!(rslts, "| ")
@@ -56,32 +66,28 @@ function edited_row(builder::MidNormalizedTableBuilder, row::EzXML.Node)::Abstra
             end
             
         end
+        
         push!(rslts, " |")
-
+        @info("Results for row: ", join(rslts, " "))
+        
         if haskey(row, "role")
             role = row["role"]
             if lowercase(role) == "header"
-                @debug("FORMAT $(role)")    
+                @debug("FORMAT $(role)") 
                 push!(rslts, "\n")                
                 for i in 1:length(cells)
                     push!(rslts, "| --- ")
                 end
-                push!(rslts, " |")
+           
+                
             end
-            
         end
-
-
-        join(rslts, "")
+        push!(rslts, " |")
+        join(rslts, " ")
     
-
-
-
     else
         @warn("I'm not prepared to parse a $(row.name)")
     end
-
-  
 end
 
 """Builder for constructing a citable passage for a normalized text from a citable passage in archival XML.
@@ -90,14 +96,15 @@ $(SIGNATURES)
 function edited(
     builder::MidNormalizedTableBuilder,
     passage::CitablePassage; 
-    edition = nothing, exemplar = nothing)
+    edition = nothing, exemplar = nothing,
+    tablify = false)
     nd  = root(parsexml(passage.text))
     @debug("xml node is a", nd.name)
     @debug("xml text is ", passage.text)
 
 
 
-    editiontext = edited_row(builder, nd)
+    editiontext = edited_row(builder, nd, tablify)
     @debug("Edition text is", editiontext)
     psg = passage.urn
     if length(workparts(psg)) < 3

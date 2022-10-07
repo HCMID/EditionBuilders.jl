@@ -28,19 +28,31 @@ end
 """
 $(SIGNATURES)
 """
-function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::AbstractString
+function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node, tablify = false)::AbstractString
+    
     rslts = []
     if row.name == "row"
         
         cells = findall("cell", row)
         @debug("Process row: $(length(cells)) cells")
-        
+        if tablify
+            for i in 1:length(cells)
+                push!(rslts, "| ")
+            end
+            push!(rslts, " |\n")
+            for i in 1:length(cells)
+                push!(rslts, "| --- ")
+            end
+            push!(rslts, " |\n")
+        end
 
         for c in cells  
+           
             push!(rslts, "| ")
             for n in eachnode(c)
                 if n.type == EzXML.ELEMENT_NODE 
                     elresults = editedelement(builder.diplomatizer, n, "")
+                    @debug("PUSHING ", elresults)
                     push!(rslts, elresults)
                  
                 elseif 	n.type == EzXML.TEXT_NODE
@@ -73,7 +85,7 @@ function edited_row(builder::MidDiplomaticTableBuilder, row::EzXML.Node)::Abstra
         end
 
 
-        join(rslts, "")
+        join(rslts, " ")
     
 
 
@@ -91,14 +103,15 @@ $(SIGNATURES)
 function edited(
     builder::MidDiplomaticTableBuilder,
     passage::CitablePassage; 
-    edition = nothing, exemplar = nothing)
+    edition = nothing, exemplar = nothing,
+    tablify = false)
     nd  = root(parsexml(passage.text))
     @debug("xml node is a", nd.name)
     @debug("xml text is ", passage.text)
 
 
 
-    editiontext = edited_row(builder, nd)
+    editiontext = edited_row(builder, nd, tablify)
     @debug("Edition text is", editiontext)
     psg = passage.urn
     if length(workparts(psg)) < 3
