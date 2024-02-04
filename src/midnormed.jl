@@ -54,11 +54,4 @@ function skipelement(builder::MidNormalizedBuilder,elname)
     elname in ["del", "ref"]
 end
 
-function edition(builder::MidNormalizedBuilder, c::CitableTextCorpus)
-    passages = map(cn -> edited(builder, cn), c.passages)
-    #tidied = map(cn -> tidyFrag(cn),passages)
-    CitableTextCorpus(passages)
-end
-
-
 

@@ -41,8 +41,8 @@ urn:cts:trmilli:tl.106.v1:1
 We use `edited` to apply our builder to a single `CitablePassage`. This creates a new `CitablePassage`.  The URN of the new passage is the same except that the version identifier is now the one we specified for our builder.  The text content is the literal text that our builder extracted from the XML source.
 
 ```jldoctest edbuild
-edited = edited(builder, cn)
-edited
+edition = edited(builder, cn)
+edition
 
 # output
 
@@ -68,7 +68,7 @@ CitableTextCorpus
 Here's the new, univocal edition we wanted.
 
 ```jldoctest edbuild
-univocal = edition(builder, corpus)
+univocal = edited(builder, corpus)
 univocal
 
 # output
