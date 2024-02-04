@@ -21,3 +21,4 @@ function edited(
     passages = map(cn -> edited(builder, cn;  edition = edition, exemplar = exemplar), c.passages)
     CitableTextCorpus(passages)
 end
+

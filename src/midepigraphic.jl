@@ -207,7 +207,8 @@ function edited_text(builder::MidEpigraphicBuilder, n::EzXML.Node, fragments, se
 end
 
 
-function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
+
+function edited(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     # First, build a dictionary of word fragments
     fragments = fragmentsDictionary(builder, c)
     usedfragments = []
@@ -223,4 +224,3 @@ function edition(builder::MidEpigraphicBuilder, c::CitableTextCorpus)
     # CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)
     CitableTextCorpus(passages)
 end
-

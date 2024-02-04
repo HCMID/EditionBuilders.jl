@@ -10,7 +10,7 @@ import CitableBase: versionid
 # Abstractions of the `EditionBuilder` trait.
 export EditionBuilder
 export versionid
-export edited_text, edited
+export edited_text, edited, edition
 export validElementNames, validelname
 
 # Implementations
